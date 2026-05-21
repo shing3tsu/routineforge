@@ -1,0 +1,271 @@
+/*
+ * New habit page — narrow single-column form with a cadence picker block.
+ */
+
+.main {
+  padding: var(--s-5);
+  padding-bottom: var(--s-12);
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 900px) {
+  .main {
+    padding: var(--s-8) var(--s-12);
+    max-width: 640px;
+    margin: 0 auto;
+  }
+}
+
+/* ---------- Breadcrumb ---------- */
+
+.crumbs {
+  font-size: var(--fs-xs);
+  color: var(--c-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: var(--s-3);
+}
+
+.crumbLink {
+  color: var(--c-text-secondary);
+  text-decoration: none;
+}
+
+.crumbLink:hover {
+  color: var(--c-text-primary);
+  text-decoration: underline;
+}
+
+.crumbSep {
+  color: var(--c-text-muted);
+}
+
+.crumbCurrent {
+  color: var(--c-text-primary);
+}
+
+/* ---------- Page head ---------- */
+
+.pageHead {
+  margin-bottom: var(--s-6);
+}
+
+.pageHead h1 {
+  font-size: var(--fs-3xl);
+  font-weight: 600;
+  letter-spacing: var(--tr-tight);
+  margin: 0 0 4px;
+  color: var(--c-text-primary);
+}
+
+@media (min-width: 900px) {
+  .pageHead h1 {
+    font-size: var(--fs-4xl);
+  }
+}
+
+.pageHead p {
+  font-size: var(--fs-base);
+  color: var(--c-text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ---------- Banner alert wrap ---------- */
+
+.alertWrap {
+  margin-bottom: var(--s-4);
+}
+
+/* ---------- Form ---------- */
+
+.form {
+  background: var(--c-surface-elevated);
+  border-radius: var(--r-xl);
+  box-shadow: var(--sh-sm), var(--sh-inner);
+  padding: var(--s-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+
+@media (max-width: 640px) {
+  .form {
+    padding: var(--s-4);
+  }
+}
+
+/* ---------- Cadence block ---------- */
+
+.cadence {
+  border: 1px solid var(--c-border-subtle);
+  border-radius: var(--r-lg);
+  padding: var(--s-4);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+.cadenceLegend {
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--c-text-secondary);
+  padding: 0 var(--s-1);
+}
+
+/* ---------- Segmented control (cadence kind) ---------- */
+
+.segmented {
+  display: inline-flex;
+  background: var(--c-surface-sunken);
+  border-radius: var(--r-full);
+  padding: var(--s-1);
+  gap: 2px;
+  flex-wrap: wrap;
+}
+
+.segment {
+  padding: 0 var(--s-3);
+  height: 36px;
+  border: 0;
+  border-radius: var(--r-full);
+  background: transparent;
+  color: var(--c-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  letter-spacing: var(--tr-wider);
+  text-transform: uppercase;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background var(--d-quick) var(--e-standard),
+    color var(--d-quick) var(--e-standard);
+}
+
+.segment:hover {
+  color: var(--c-text-primary);
+}
+
+.segment:focus-visible {
+  outline: 2px solid var(--c-focus-ring);
+  outline-offset: 2px;
+}
+
+.segmentSelected {
+  background: var(--c-surface-elevated);
+  color: var(--c-text-primary);
+  box-shadow: var(--sh-xs);
+}
+
+.cadenceHint {
+  font-size: var(--fs-xs);
+  color: var(--c-text-muted);
+  margin: 0;
+}
+
+.cadenceError {
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  color: var(--c-danger);
+}
+
+/* ---------- Sub-controls for weekly_count ---------- */
+
+.weeklyRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+}
+
+.subLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--c-text-secondary);
+}
+
+.numberInput {
+  height: 44px;
+  width: 80px;
+  padding: 0 var(--s-3);
+  border: 1px solid var(--c-border-subtle);
+  border-radius: var(--r-md);
+  font-family: inherit;
+  font-size: var(--fs-base);
+  color: var(--c-text-primary);
+  background: var(--c-surface-elevated);
+}
+
+.numberInput:focus-visible {
+  outline: 2px solid var(--c-focus-ring);
+  outline-offset: 1px;
+  border-color: var(--c-border-focus);
+}
+
+.select {
+  height: 44px;
+  padding: 0 var(--s-3);
+  border: 1px solid var(--c-border-subtle);
+  border-radius: var(--r-md);
+  font-family: inherit;
+  font-size: var(--fs-base);
+  color: var(--c-text-primary);
+  background: var(--c-surface-elevated);
+}
+
+.select:focus-visible {
+  outline: 2px solid var(--c-focus-ring);
+  outline-offset: 1px;
+  border-color: var(--c-border-focus);
+}
+
+/* ---------- Sub-controls for specific_weekdays ---------- */
+
+.weekdaysRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+/* ---------- Form actions ---------- */
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--s-3);
+  margin-top: var(--s-2);
+}
+
+.cancelLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 var(--s-4);
+  border-radius: var(--r-full);
+  font-family: inherit;
+  font-size: var(--fs-base);
+  font-weight: 500;
+  color: var(--c-text-secondary);
+  text-decoration: none;
+}
+
+.cancelLink:hover {
+  background: var(--c-surface-sunken);
+  color: var(--c-text-primary);
+  text-decoration: none;
+}
+
+.cancelLink:focus-visible {
+  outline: 2px solid var(--c-focus-ring);
+  outline-offset: 3px;
+}
