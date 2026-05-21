@@ -1,0 +1,141 @@
+/*
+ * InstallPrompt — bottom-of-screen banner.
+ *
+ * - Fixed to the bottom of the viewport so it doesn't shift the page layout
+ *   when it appears.
+ * - Centered with a max-width on desktop so it reads as a single card, not a
+ *   full-width bar.
+ * - Honors safe-area-inset-bottom for iOS home-indicator clearance.
+ * - On mobile, sits ABOVE the bottom-nav (which itself sits at the bottom
+ *   of the .rf-wash container — z-index keeps the install banner on top).
+ * - Slides up on mount (fast, ease-out per tokens). Respects reduced motion.
+ *
+ * Visual target: design/mockups/install.html + design/screens/edges.jsx →
+ * InstallBanner.
+ */
+
+.root {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(80px + env(safe-area-inset-bottom));
+  z-index: var(--z-toast);
+  padding: var(--s-3);
+  pointer-events: none; /* let .inner own the pointer surface */
+  display: flex;
+  justify-content: center;
+}
+
+@media (min-width: 900px) {
+  .root {
+    /* desktop has no bottom-nav, so anchor to the bottom-right */
+    bottom: var(--s-8);
+    left: auto;
+    right: var(--s-8);
+    justify-content: flex-end;
+  }
+}
+
+.inner {
+  pointer-events: auto;
+  width: 100%;
+  max-width: 480px;
+  background: var(--c-surface-elevated);
+  color: var(--c-text-primary);
+  border-radius: var(--r-xl);
+  box-shadow: var(--sh-lg);
+  padding: var(--s-3) var(--s-4);
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  animation: slideUp var(--d-quick) var(--e-decel) both;
+}
+
+@media (min-width: 900px) {
+  .inner {
+    max-width: 360px;
+  }
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--fs-base);
+  font-weight: 500;
+  color: var(--c-text-primary);
+  margin: 0;
+  letter-spacing: var(--tr-snug);
+  line-height: 1.4;
+}
+
+.desc {
+  font-size: var(--fs-xs);
+  color: var(--c-text-muted);
+  margin: 2px 0 0;
+  line-height: 1.45;
+}
+
+/*
+ * Inline iOS share-icon glyph. Used in the iOS install instruction so the
+ * user can recognise the icon they're being told to tap. Vertical-aligned
+ * to the cap height so it sits with the surrounding text rather than the
+ * baseline (which would float it too high next to lowercase letters).
+ */
+.shareGlyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: -2px;
+  color: var(--c-text-secondary);
+}
+
+.actions {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.closeBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-full);
+  background: transparent;
+  color: var(--c-text-secondary);
+  border: 0;
+  cursor: pointer;
+  transition: background var(--d-quick) var(--e-standard);
+}
+
+.closeBtn:hover {
+  background: var(--c-surface-sunken);
+  color: var(--c-text-primary);
+}
+
+.closeBtn:focus-visible {
+  outline: 2px solid var(--c-focus-ring);
+  outline-offset: 2px;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inner {
+    animation: none;
+  }
+}
