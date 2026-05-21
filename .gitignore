@@ -1,0 +1,72 @@
+# Node
+node_modules/
+.pnp.*
+.yarn/
+.pnpm-store/
+
+# Next.js
+.next/
+.next-e2e/
+out/
+next-env.d.ts
+
+# Env / secrets
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+dev.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Coverage / test
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+.playwright/
+# Playwright storage state (per-run auth cookies).
+tests/e2e/.auth/
+
+# Build outputs
+dist/
+build/
+
+# Caches
+.turbo/
+.cache/
+.eslintcache
+
+# Agent / claude
+.claude/
+.agent-logs/
+CLAUDE.md
+AGENTS.md
+
+# Drizzle generated meta cache
+**/.drizzle/
+drizzle/.drizzle-meta-tmp/
+
+# pglite dev fallback
+**/pglite-dev/
+.local-data/
+.local-data-e2e/
+
+# Stray DB file in repo root (not part of the app)
+ruvector.db
+
+# Build info
+*.tsbuildinfo
