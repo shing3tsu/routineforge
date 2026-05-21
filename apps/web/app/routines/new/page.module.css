@@ -1,0 +1,131 @@
+/*
+ * New routine page — narrow single-column form.
+ */
+
+.main {
+  padding: var(--s-5);
+  padding-bottom: var(--s-12);
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 900px) {
+  .main {
+    padding: var(--s-8) var(--s-12);
+    max-width: 640px;
+    margin: 0 auto;
+  }
+}
+
+/* ---------- Breadcrumb ---------- */
+
+.crumbs {
+  font-size: var(--fs-xs);
+  color: var(--c-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: var(--s-3);
+}
+
+.crumbLink {
+  color: var(--c-text-secondary);
+  text-decoration: none;
+}
+
+.crumbLink:hover {
+  color: var(--c-text-primary);
+  text-decoration: underline;
+}
+
+.crumbSep {
+  color: var(--c-text-muted);
+}
+
+.crumbCurrent {
+  color: var(--c-text-primary);
+}
+
+/* ---------- Page head ---------- */
+
+.pageHead {
+  margin-bottom: var(--s-6);
+}
+
+.pageHead h1 {
+  font-size: var(--fs-3xl);
+  font-weight: 600;
+  letter-spacing: var(--tr-tight);
+  margin: 0 0 4px;
+  color: var(--c-text-primary);
+}
+
+@media (min-width: 900px) {
+  .pageHead h1 {
+    font-size: var(--fs-4xl);
+  }
+}
+
+.pageHead p {
+  font-size: var(--fs-base);
+  color: var(--c-text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ---------- Banner alert wrap ---------- */
+
+.alertWrap {
+  margin-bottom: var(--s-4);
+}
+
+/* ---------- Form ---------- */
+
+.form {
+  background: var(--c-surface-elevated);
+  border-radius: var(--r-xl);
+  box-shadow: var(--sh-sm), var(--sh-inner);
+  padding: var(--s-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+
+@media (max-width: 640px) {
+  .form {
+    padding: var(--s-4);
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--s-3);
+  margin-top: var(--s-2);
+}
+
+.cancelLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 var(--s-4);
+  border-radius: var(--r-full);
+  font-family: inherit;
+  font-size: var(--fs-base);
+  font-weight: 500;
+  color: var(--c-text-secondary);
+  text-decoration: none;
+}
+
+.cancelLink:hover {
+  background: var(--c-surface-sunken);
+  color: var(--c-text-primary);
+  text-decoration: none;
+}
+
+.cancelLink:focus-visible {
+  outline: 2px solid var(--c-focus-ring);
+  outline-offset: 3px;
+}
