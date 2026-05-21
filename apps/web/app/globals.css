@@ -1,0 +1,855 @@
+/*
+   RoutineForge global styles.
+
+   Layered architecture — these @import rules must stay at the top of the
+   file, before any custom rule, per CSS spec:
+
+   1. design/tokens.css mirror — every custom property (--c-, --s-, --r-,
+      --sh-, --d-, --e-, --fs-, --lh-, --tr-, --z-) scoped by
+      [data-palette][data-theme] on <html>. Palette and theme attributes
+      are set server-side from cookies in apps/web/app/layout.tsx. Default
+      palette is bone; if no data-theme attribute is present, the
+      :not([data-theme=dark]) selectors keep the light palette in play, and
+      the @media (prefers-color-scheme: dark) rule below flips color-scheme
+      so native form controls follow suit.
+
+   2. design/base.css mirror — element resets, watercolor wash (.rf-wash),
+      and every hand-rolled UI primitive class (.rf-card, .rf-btn,
+      .rf-field, .rf-check, .rf-chip, .rf-badge, .rf-heatmap, .rf-nav,
+      .rf-tabs, .rf-alert, .rf-eyebrow, .mono, .num, etc.).
+
+   3. App-level rules below (focus visibility, color-scheme media query,
+      a11y utility). design/base.css already ships its own reset and
+      reduced-motion rules — we don't duplicate them.
+
+   Cross-package imports note: this file lives at apps/web/app/globals.css;
+   the canonical design files live at the repo root in design/. Next.js
+   15's css-loader does NOT resolve @import URLs that escape the package
+   root with ../../../ — the build fails with a postcss "Unclosed string"
+   error on the next adjacent rule, because the resolver silently gives up
+   and downstream parsing desyncs. Workaround: the design CSS is mirrored
+   into apps/web/lib/theme/_design/ by this dispatch and the @imports
+   point there. The copies are byte-identical to the canonical files in
+   design/. Keeping the copies in sync is currently manual — see the
+   README in apps/web/lib/theme/_design/ for the procedure. A future
+   build step could symlink or codegen these (out of scope here).
+*/
+@import '../lib/theme/_design/tokens.css';
+@import '../lib/theme/_design/base.css';
+@import '../lib/theme/_design/animations.css';
+
+/* ---------- App-level overrides on top of design/base.css ---------- */
+
+/* design/base.css resets focus styling globally and re-establishes a
+   :focus-visible outline. We want the same intent but with our own
+   standard outline-offset on the rare site-level focused element that
+   isn't a .rf- primitive. The rule below is a no-op for those that pick
+   up base.css's stronger styling. */
+:focus {
+  outline: none;
+}
+
+/* ---------- color-scheme follows explicit theme cookie ----------
+   design/base.css doesn't set color-scheme. We declare it here so native
+   UA controls (scrollbars, autofill, native form widgets) follow the
+   user's choice or system preference. When data-theme is unset, fall
+   back to prefers-color-scheme. */
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) {
+    color-scheme: dark;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  html:not([data-theme]) {
+    color-scheme: light;
+  }
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+html[data-theme='light'] {
+  color-scheme: light;
+}
+
+/* ---------- Utility: visually-hidden (a11y) ---------- */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Button supplements ----------
+   design/base.css ships `.rf-btn` and every variant/size. The bits below
+   add the spinner animation + label slot for loading state, which the
+   design source doesn't yet codify. Kept here (not in a CSS module) so the
+   classes stay globally addressable from Button.tsx via plain strings. */
+
+.rf-btn__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.rf-btn__spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+  animation: rf-btn-spin 1.2s linear infinite;
+}
+
+.rf-btn__spinner svg {
+  width: 1em;
+  height: 1em;
+  display: block;
+}
+
+@keyframes rf-btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rf-btn__spinner {
+    animation-duration: 2.4s;
+  }
+}
+
+/* ---------- List row card variant ----------
+   `.rf-card` is the static elevated surface. List items want one extra
+   refinement: the whole card is a tappable link/button, so we add the row-
+   level interactions (hover lift, focus ring, flex layout). */
+
+.rf-list-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  transition:
+    background var(--d-quick) var(--e-standard),
+    box-shadow var(--d-quick) var(--e-standard);
+}
+
+a.rf-list-row {
+  text-decoration: none;
+  color: inherit;
+}
+
+a.rf-list-row:hover,
+.rf-list-row:hover {
+  box-shadow: var(--sh-md), var(--sh-inner);
+}
+
+a.rf-list-row:focus-visible {
+  outline: 2px solid var(--c-focus-ring);
+  outline-offset: 2px;
+}
+
+/* ---------- Alert supplements ----------
+   `.rf-alert` ships in base.css. Internal slots (body, title, message,
+   close button) are component-side and added here so they're globally
+   addressable. */
+
+.rf-alert__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.rf-alert__title {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.rf-alert__title + .rf-alert__message {
+  font-size: var(--fs-xs);
+  opacity: 0.92;
+}
+
+.rf-alert__close {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin: -2px -4px -2px 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: inherit;
+  border: 0;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity var(--d-quick) var(--e-standard);
+}
+
+.rf-alert__close:hover {
+  opacity: 1;
+}
+
+.rf-alert__close:focus-visible {
+  outline: 2px solid var(--c-focus-ring);
+  outline-offset: 2px;
+}
+
+/* ---------- TextField supplements ----------
+   design/base.css ships `.rf-field`. We add a label-row helper for the
+   "Forgot password?" inline action pattern used by the login form. */
+
+.rf-field__label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--s-2);
+}
+
+.rf-field__required {
+  font-size: var(--fs-xs);
+  color: var(--c-text-muted);
+  font-weight: 400;
+  letter-spacing: var(--tr-normal);
+}
+
+/* ---------- CheckRow supplement ----------
+   design/base.css ships `.rf-checkrow` for the row + `.rf-checkrow__label`
+   for the title. We add a trailing meta slot (mono number / streak) that
+   the design's `today.jsx` mockup uses inline-styled — we promote it to a
+   class for component reuse. */
+
+.rf-checkrow__meta {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--c-text-muted);
+  letter-spacing: var(--tr-tight);
+  margin-left: auto;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* When a CheckRow is rendered as a button, strip default chrome so the
+   `.rf-checkrow` painting (background, hover) shows through. */
+button.rf-checkrow {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  font: inherit;
+}
+button.rf-checkrow:focus-visible {
+  outline: 2px solid var(--c-focus-ring);
+  outline-offset: 2px;
+}
+
+/* ---------- StreakBadge supplements ----------
+   `.rf-streak`/`__num`/`__unit` ship in base.css. The component adds an
+   optional "best · N" affordance for the large variant and a "subtle"
+   modifier for the zero-state (background + colour quiet down). */
+
+.rf-streak__best {
+  margin-left: var(--s-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tr-wider);
+  text-transform: uppercase;
+  color: var(--c-text-muted);
+  align-self: center;
+}
+
+.rf-streak--subtle {
+  background: var(--c-surface-sunken);
+  color: var(--c-text-muted);
+}
+
+/* ---------- CalendarHeatmap supplements ----------
+   design/base.css ships `.rf-heat` + `.rf-heat__cell` with `data-level`
+   variants. The grid as designed needs a wrapper that lays out the
+   summary/legend underneath. We keep the spec-driven cell painting in
+   base.css and add only the layout chrome here. */
+
+.rf-heat__wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+.rf-heat__legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--c-text-muted);
+  letter-spacing: var(--tr-wider);
+  text-transform: uppercase;
+}
+
+.rf-heat__legend-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+}
+
+.rf-heat__cell--today {
+  outline: 1.5px solid var(--c-brand-primary);
+  outline-offset: 0;
+}
+
+.rf-heat__cell--future {
+  opacity: 0.55;
+}
+
+/* Interactive (button) variant — resets default <button> chrome and layers
+   hover/focus affordances onto the existing painted cell. Keeps the visual
+   identical when nothing is happening; only intent (cursor, focus ring,
+   hover hint) is added. */
+.rf-heat__cell--button {
+  padding: 0;
+  border: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    background var(--d-quick) var(--e-standard),
+    box-shadow var(--d-quick) var(--e-standard),
+    opacity var(--d-quick) var(--e-standard);
+}
+.rf-heat__cell--button:disabled,
+.rf-heat__cell--button[aria-disabled='true'] {
+  cursor: default;
+}
+.rf-heat__cell--button:focus-visible {
+  outline: 2px solid var(--c-focus-ring);
+  outline-offset: 2px;
+}
+/* Not-completed hover → faint brand-tint preview ("you'd be marking this
+   done"). Skip the preview for future / before-creation / pending cells. */
+.rf-heat__cell--button.cellOff:hover:not(:disabled):not([aria-busy='true']) {
+  background: color-mix(in oklab, var(--c-brand-primary) 25%, var(--c-surface-sunken));
+}
+/* Completed hover → muted preview ("you'd be undoing this"). */
+.rf-heat__cell--button.cellOn:hover:not(:disabled):not([aria-busy='true']) {
+  background: color-mix(in oklab, var(--c-brand-primary) 55%, var(--c-surface-sunken));
+}
+
+/* Pending — keep the painted state but dim it; pointer-events stay off via
+   the `disabled` attribute (set by the component while the request is in
+   flight). */
+.rf-heat__cell--busy {
+  opacity: 0.45;
+}
+
+/* Error — brief background flash (~600ms). The animation runs once; the
+   component clears the class shortly after. */
+.rf-heat__cell--error {
+  animation: rf-heat-cell-error 600ms var(--e-standard);
+}
+@keyframes rf-heat-cell-error {
+  0%   { background: var(--c-danger-subtle); box-shadow: inset 0 0 0 1.5px var(--c-danger); }
+  60%  { background: var(--c-danger-subtle); box-shadow: inset 0 0 0 1.5px var(--c-danger); }
+  100% { /* fall back to whatever the data-level paint says */ }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rf-heat__cell--error { animation: none; }
+}
+
+/* ---------- BottomNav / SideNav visibility ----------
+   Mobile-first: bottom nav is visible by default, hidden on ≥900px.
+   Side nav is hidden on mobile, visible on ≥900px (flex parent decides
+   layout — the rail is `flex: 0 0 220px`). */
+
+@media (min-width: 900px) {
+  .rf-bottomnav--mobile {
+    display: none;
+  }
+}
+
+@media (max-width: 899px) {
+  .rf-sidenav--desktop {
+    display: none;
+  }
+}
+
+.rf-bottomnav__item {
+  text-decoration: none;
+}
+
+.rf-sidenav__item {
+  text-decoration: none;
+}
+
+/* ---------- Signed-in page container ----------
+   The `<AppShell>` wraps the page in `.rf-wash` (watercolor backdrop +
+   relative positioning for the bottom-nav anchor). Each page renders into
+   `.rf-page`, which provides the consistent gutter + max-width and pads
+   the bottom so the bottom-nav strip (≈64px + safe-area) doesn't occlude
+   the final scrollable element. */
+
+.rf-page {
+  position: relative;
+  z-index: 1;
+  padding: var(--s-3) var(--s-5);
+  /* leave room for the bottom-nav strip on mobile */
+  padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+}
+
+@media (min-width: 900px) {
+  .rf-page {
+    padding: var(--s-8) var(--s-12);
+    /* desktop has no bottom nav; just a comfortable bottom gutter */
+    padding-bottom: var(--s-12);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+}
+
+.rf-page--narrow {
+  max-width: 720px;
+}
+
+@media (min-width: 900px) {
+  .rf-page--narrow {
+    max-width: 720px;
+  }
+}
+
+/* ---------- Section eyebrow / heading helpers ----------
+   These are tiny wrappers around the existing `.rf-eyebrow` and font tokens,
+   used by the new page layouts (Today, Routines, Habits, Account, detail
+   pages) so the header copy is consistent without per-page styling. */
+
+.rf-h1 {
+  margin: var(--s-2) 0 0 0;
+  font-size: var(--fs-4xl);
+  letter-spacing: var(--tr-tight);
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--c-text-primary);
+}
+
+@media (min-width: 900px) {
+  .rf-h1 {
+    font-size: var(--fs-5xl);
+  }
+}
+
+.rf-h2 {
+  margin: 0;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  letter-spacing: var(--tr-snug);
+  color: var(--c-text-primary);
+}
+
+.rf-page-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-4);
+  margin-bottom: var(--s-6);
+  flex-wrap: wrap;
+}
+
+.rf-page-head__meta {
+  font-size: var(--fs-base);
+  color: var(--c-text-secondary);
+  margin: var(--s-2) 0 0 0;
+}
+
+/* ---------- Today hero numeral ----------
+   The hero numeral is THE centerpiece on the today view. 72px on mobile
+   (with `--fs-7xl` from tokens), 88px on tablet/desktop. Mono, tight
+   tracking. */
+
+.rf-today-hero {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-4);
+  margin-top: var(--s-3);
+}
+
+.rf-today-hero__num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--fs-7xl);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--c-text-primary);
+}
+
+.rf-today-hero__cap {
+  font-size: var(--fs-lg);
+  color: var(--c-text-secondary);
+  letter-spacing: var(--tr-snug);
+  max-width: 180px;
+  line-height: 1.2;
+}
+
+/* ---------- Progress dots ----------
+   The 7-dot progress run that sits under the hero numeral. */
+
+.rf-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rf-dots__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--c-border-subtle);
+  transition: background var(--d-quick) var(--e-standard);
+}
+
+.rf-dots__dot[data-on="true"] {
+  background: var(--c-brand-primary);
+}
+
+/* ---------- Floating action button ----------
+   Pill-shaped CTA pinned above the bottom-nav on mobile. Used on the
+   list pages (Routines, Habits) where the primary action is "new". */
+
+.rf-fab {
+  position: absolute;
+  right: var(--s-5);
+  bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+  height: 56px;
+  min-width: 56px;
+  padding: 0 var(--s-5);
+  border-radius: 999px;
+  border: 0;
+  background: var(--c-brand-primary);
+  color: var(--c-brand-on-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-weight: 600;
+  font-size: var(--fs-base);
+  box-shadow: var(--sh-lg);
+  cursor: pointer;
+  z-index: var(--z-nav);
+  text-decoration: none;
+}
+
+.rf-fab:hover {
+  background: var(--c-brand-primary-hover);
+}
+
+.rf-fab:focus-visible {
+  outline: 2px solid var(--c-focus-ring);
+  outline-offset: 3px;
+}
+
+@media (min-width: 900px) {
+  .rf-fab {
+    /* desktop has its own header CTA; hide the FAB */
+    display: none;
+  }
+}
+
+/* ---------- Stat tile ----------
+   The 3-up stat grid on the habit detail page (Current / Longest / Total).
+   Mono numerals, eyebrow labels. */
+
+.rf-stat {
+  padding: var(--s-4);
+}
+
+.rf-stat__v {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  letter-spacing: var(--tr-tight);
+  font-size: var(--fs-3xl);
+  line-height: 1;
+  color: var(--c-text-primary);
+}
+
+@media (min-width: 900px) {
+  .rf-stat__v {
+    font-size: var(--fs-5xl);
+  }
+}
+
+.rf-stat__l {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--c-text-muted);
+  letter-spacing: var(--tr-wider);
+  text-transform: uppercase;
+  margin-top: var(--s-2);
+}
+
+/* ---------- Palette swatch button ----------
+   Used by the account-page palette switcher. Each button renders a color
+   block + name; the active one has a strong outline. */
+
+.rf-swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--s-2);
+  padding: var(--s-2);
+  border-radius: var(--r-lg);
+  border: 0;
+  background: var(--c-surface-elevated);
+  box-shadow: var(--sh-xs), inset 0 0 0 1px var(--c-border-subtle);
+  cursor: pointer;
+  transition:
+    box-shadow var(--d-quick) var(--e-standard),
+    transform var(--d-snap) var(--e-soft);
+  font: inherit;
+  color: inherit;
+  text-align: left;
+}
+
+.rf-swatch:hover {
+  box-shadow: var(--sh-sm), inset 0 0 0 1px var(--c-border-strong);
+}
+
+.rf-swatch:active {
+  transform: scale(0.97);
+}
+
+/* Active state: a calmer 1.5px hairline ring in the brand colour instead of
+   the previous 2px heavy outline. Keeps the surface lift (--sh-sm) so the
+   selected card still has a hint of "raised" presence. */
+.rf-swatch[aria-pressed='true'] {
+  box-shadow: var(--sh-sm), inset 0 0 0 1.5px var(--c-brand-primary);
+}
+
+.rf-swatch:focus-visible {
+  outline: 2px solid var(--c-focus-ring);
+  outline-offset: 2px;
+}
+
+.rf-swatch__chip {
+  height: 40px;
+  border-radius: var(--r-md);
+  background: linear-gradient(
+    135deg,
+    var(--c-wash-c, var(--c-surface-sunken)),
+    var(--c-wash-a, var(--c-surface-base))
+  );
+  box-shadow: inset 0 0 0 1px var(--c-border-subtle);
+}
+
+.rf-swatch__name {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tr-wider);
+  text-transform: uppercase;
+  color: var(--c-text-secondary);
+  text-align: center;
+}
+
+.rf-swatch[aria-pressed='true'] .rf-swatch__name {
+  color: var(--c-text-primary);
+  font-weight: 600;
+}
+
+/* ---------- ThemeSwitcher: icon + label tab variant ----------
+   The full-size `<ThemeSwitcher>` on /account pairs each label with the
+   matching icon (sun / auto / moon). We add the spacing and inactive icon
+   dimming here; the base `.rf-tab` rule still owns height + radius. */
+
+.rf-tab--with-icon {
+  gap: var(--s-2);
+}
+
+.rf-tab__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Icons follow the tab's text colour, including the muted shade on
+     inactive segments, so the icon doesn't shout while the label whispers. */
+  color: inherit;
+  opacity: 0.85;
+}
+
+.rf-tab[aria-selected='true'] .rf-tab__icon {
+  opacity: 1;
+}
+
+/* ---------- Quick appearance: compact palette dot + theme tab ----------
+   Used by the SideNav footer's QuickAppearance widget. Smaller than the
+   full /account-page swatches/tabs so they fit a 220px rail without
+   crowding the user tile underneath.
+
+   The palette dot uses the same `[data-palette]`-scoped `--c-wash-*`
+   trick as the full `.rf-swatch__chip` so each dot previews its own
+   palette's colours regardless of which palette the page is currently
+   on.  */
+
+.rf-quick-swatch {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  width: 100%;
+  height: 24px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background var(--d-quick) var(--e-standard),
+    transform var(--d-snap) var(--e-soft);
+}
+
+.rf-quick-swatch:hover {
+  background: color-mix(in oklab, var(--c-surface-sunken) 60%, transparent);
+}
+
+.rf-quick-swatch:active {
+  transform: scale(0.94);
+}
+
+.rf-quick-swatch:focus-visible {
+  outline: 2px solid var(--c-focus-ring);
+  outline-offset: 2px;
+}
+
+.rf-quick-swatch[disabled] {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.rf-quick-swatch__dot {
+  display: block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    var(--c-wash-c, var(--c-surface-sunken)),
+    var(--c-wash-a, var(--c-surface-base))
+  );
+  box-shadow: inset 0 0 0 1px
+    color-mix(in oklab, var(--c-border-subtle) 60%, transparent);
+}
+
+/* Active palette: a brand-tinted underline anchored beneath the dot rather
+   than a ring around the whole button. At 16px the ring crowded the dot;
+   the underline reads as a calm "this one is on" indicator without
+   competing with the dot's gradient. Absolute-positioned so it doesn't
+   reflow the dot when the active state flips on or off. */
+.rf-quick-swatch[aria-pressed='true']::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 1px;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 1.5px;
+  border-radius: 1px;
+  background: var(--c-brand-primary);
+}
+
+/* Compact variant of the .rf-tabs / .rf-tab pill in design/base.css.
+   Shorter (24px vs 36px), tighter padding, lighter active treatment —
+   sized for the SideNav rail. Uses a tighter --r-md radius rather than the
+   base --r-full pill because the smaller height reads crisper as a rounded
+   rectangle than as a full pill. */
+.rf-tabs--compact {
+  padding: 2px;
+  border-radius: var(--r-md);
+}
+
+.rf-tab--compact {
+  height: 24px;
+  gap: 0;
+  padding: 0 var(--s-1);
+  border-radius: calc(var(--r-md) - 2px);
+  color: var(--c-text-muted);
+  /* Reset the base .rf-tab font sizing for the icon-only context — uppercase
+     letter-spacing is irrelevant here and the visually-hidden label is the
+     only text. */
+  letter-spacing: normal;
+}
+
+/* Inactive hover: subtle bg lift + slightly stronger text/icon. */
+.rf-tab--compact:hover:not([aria-selected='true']):not([disabled]) {
+  background: var(--c-surface-sunken);
+  color: var(--c-text-secondary);
+}
+
+/* Active: no surface lift — just a subtle inset hairline + stronger text
+   colour. Overrides the heavier `.rf-tab[aria-selected="true"]` rule from
+   base.css (solid surface-elevated + sh-xs shadow) which is too loud
+   against the sidebar's quiet visual weight. */
+.rf-tab--compact[aria-selected='true'] {
+  background: transparent;
+  color: var(--c-text-primary);
+  box-shadow: inset 0 0 0 1px
+    color-mix(in oklab, var(--c-border-subtle) 80%, transparent);
+}
+
+.rf-tab--compact[disabled] {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* ---------- BottomNav / SideNav label ----------
+   design/base.css ships the structural `.rf-bottomnav` / `.rf-sidenav`
+   container styles. We expose a small `__label` helper for the icon-paired
+   text inside each item (mono caps in the bottom nav, sans in the side
+   nav). */
+
+.rf-bottomnav__label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: var(--tr-wider);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* ---------- BrandLockup mark glyph ----------
+   The brand mark sits to the left of the wordmark. We don't have a single
+   "rf-mark" class in base.css — apply tokens directly here. */
+
+.rf-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  color: var(--c-text-primary);
+}
+
+.rf-brand__mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-brand-primary);
+  flex: 0 0 auto;
+}
+
+.rf-brand__name {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: var(--tr-tight);
+  white-space: nowrap;
+}
+
+.rf-brand--sm .rf-brand__name {
+  font-size: var(--fs-sm);
+}
+
+.rf-brand--md .rf-brand__name {
+  font-size: var(--fs-base);
+}
