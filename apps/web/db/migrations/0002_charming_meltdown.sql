@@ -1,0 +1,1 @@
+ALTER TABLE "routine_day_steps" ALTER COLUMN "position" SET DATA TYPE integer;
