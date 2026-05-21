@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+  <!--
+    RoutineForge favicon — "the kept promise"
+
+    A hand-drawn check inside a hand-drawn ring. The exact same glyph the
+    in-app BrandLockup uses (apps/web/components/ui/BrandLockup.tsx), but
+    simplified and re-tuned for 16px legibility and rasterized PWA icons.
+
+    Why this is the right mark:
+      The favicon must derive from the in-app brand expression. The
+      BrandLockup IS a check-in-a-circle (rendered through the
+      #rf-mark-rough feTurbulence filter at runtime). The favicon takes
+      that same glyph, bakes the hand-drawn imperfection into the path
+      geometry (asymmetric cubic-Bezier control points, intentionally
+      "lifted" endpoints), and drops the runtime filter — favicons get
+      rasterized at 16px where displacement maps collapse into mud.
+
+    Tuning vs the in-app mark:
+      - Ring: cubic arcs with slightly off-spec control points so each
+        quadrant is a different curvature. A pen drawn ring is never a
+        perfect circle; this isn't either. The path also leaves a subtle
+        hair-gap near the start of the stroke (no Z close) — the small
+        tell of a lifted pen that says "human hand".
+      - Check: only two segments (descending stroke into the elbow, then
+        rising stroke to the upper-right). Endpoints lifted off the
+        geometric ideal so the corners read as drawn, not stamped. The
+        elbow is shifted slightly low-right of dead-center for visual
+        weight — a centered check looks like a registration mark, an
+        off-axis one looks like a tick.
+      - Stroke 2.8 (vs the in-app's 2): heavier so the check survives
+        rasterization at 16px. Below ~2.5 the elbow turns to noise.
+
+    Token mapping (the SVG itself ships as currentColor; the rasterizer
+    bakes these values in):
+      ink     → --c-text-primary    (graphite-dark: #EEEEF2)
+      ground  → --c-surface-base    (graphite-dark: #101012)
+
+    Why ink = --c-text-primary (not --c-brand-primary):
+      Graphite-dark's brand-primary is #A78BFA (purple). At favicon size,
+      purple-on-near-black reads as generic-SaaS / AI-template (~7.3:1
+      contrast, AA Large). The text-primary near-white #EEEEF2 reads
+      quieter, more mature, and holds ~17.5:1 contrast (AAA) — important
+      because the favicon mark's strokes are thin and need every drop of
+      contrast they can get at 16px. The check-in-a-ring is the shape
+      that carries brand recognition; the colour stays restrained.
+
+    Geometry:
+      - viewBox 32×32. All geometry stays within radius 11.5 of (16,16).
+      - 80% maskable safe-zone radius from center = 12.8 units, so the
+        mark sits inside the safe-zone with ~1.3 units of breathing room
+        on the diagonal.
+  -->
+  <!-- ring: four cubic arcs with asymmetric control points; subtle hair-gap near the start of stroke (no Z close) -->
+  <path d="M16.4 4.6
+           C 22.3 4.85, 27.15 9.75, 27.3 15.7
+           C 27.45 21.55, 22.7 26.85, 16.6 27.25
+           C 10.35 27.6, 5.05 22.7, 4.75 16.6
+           C 4.5 10.55, 9.25 5.3, 15.05 4.75" />
+  <!-- check: two segments, elbow slightly low-right of center, endpoints "lifted" -->
+  <path d="M10.4 16.2
+           L 14.35 20.4
+           L 22.25 11.05" />
+</svg>

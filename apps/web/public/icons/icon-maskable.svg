@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="RoutineForge">
+  <!--
+    RoutineForge — maskable icon variant.
+    Per https://w3c.github.io/manifest/#icon-masks, maskable icons must keep
+    their "minimum safe area" within the inner 80% (a 409.6px circle centered).
+    Android masks aggressively (circle, squircle, teardrop, etc.) so we keep
+    the brand mark well inside this safe zone and let the brand color fill the
+    full square so the OS-applied mask never reveals transparent corners.
+  -->
+  <rect width="512" height="512" fill="#1F5A99"/>
+  <!--
+    Same "R" mark as the primary icon, but scaled down to ~62% so the entire
+    letterform sits comfortably inside the safe area no matter what shape the
+    OS applies. Vertically + horizontally centered on the 512px canvas.
+    Path here is the same letterform as icon.svg, but with a +88px translation
+    on both axes and ~0.62 scale (pre-baked into the coordinates).
+  -->
+  <path fill="#FFFFFF" d="M199 198 H276 C312 198 337 221 337 254 C337 278 324 297 303 305 L344 364 H303 L267 313 H236 V364 H199 Z M236 233 V279 H273 C289 279 299 270 299 256 C299 242 289 233 273 233 Z"/>
+</svg>

@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RoutineForge — Habits list (mockup)</title>
+  <style>
+    :root{--sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:20px;--sp-6:24px;--sp-8:32px;--sp-10:40px;--sp-12:48px;--font-sans:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI Variable","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;--rad-sm:4px;--rad-md:6px;--rad-lg:10px;--rad-full:9999px;}
+    .theme-light{--surface-base:#FCFCFB;--surface-elevated:#FFFFFF;--surface-sunken:#ECEDEA;--text-primary:#15171A;--text-secondary:#404549;--text-muted:#71767C;--border-subtle:#DDDFDB;--border-strong:#C7CAC5;--brand-primary:#1F5A99;--brand-primaryHover:#2C6AAA;--brand-primarySubtle:#EAF2FB;--brand-onPrimary:#FFFFFF;--state-success:#377C33;--state-successSubtle:#EEF6EE;--state-successBorder:#A8D0A7;--focus-ring:#1F5A99;--streak-fill:#C2872A;--streak-subtle:#FBF3E2;--streak-text:#5F4014;--streak-border:#ECC881;--shadow-1:0 1px 2px 0 rgba(15,17,20,0.06);}
+    .theme-dark{--surface-base:#0E1013;--surface-elevated:#1E2125;--surface-sunken:#08090B;--text-primary:#ECEEF1;--text-secondary:#B7BCC2;--text-muted:#8A9097;--border-subtle:#262A2F;--border-strong:#383D43;--brand-primary:#6FA8DC;--brand-primaryHover:#5C97CD;--brand-primarySubtle:rgba(111,168,220,0.12);--brand-onPrimary:#0E1013;--state-success:#6DB46A;--state-successSubtle:rgba(109,180,106,0.12);--state-successBorder:rgba(109,180,106,0.32);--focus-ring:#6FA8DC;--streak-fill:#D4A24A;--streak-subtle:rgba(212,162,74,0.14);--streak-text:#EAC889;--streak-border:rgba(212,162,74,0.36);--shadow-1:0 1px 2px 0 rgba(0,0,0,0.40);}
+
+    html,body{margin:0;padding:0;font-family:var(--font-sans);background:#0a0a0b;color:#ECEEF1;}
+    body{padding:var(--sp-6);}
+    .mockup-controls{display:flex;gap:var(--sp-3);align-items:center;margin-bottom:var(--sp-6);flex-wrap:wrap;}
+    .mockup-controls h1{font-size:14px;font-weight:600;margin:0;opacity:0.7;letter-spacing:0.04em;text-transform:uppercase;}
+    .mockup-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-6);align-items:start;}
+    @media (max-width:1100px){.mockup-grid{grid-template-columns:1fr;}}
+    .viewport{border:1px solid #2a2a2c;border-radius:12px;overflow:hidden;background:#1a1a1c;}
+    .viewport-label{font-size:12px;padding:var(--sp-2) var(--sp-3);background:#1a1a1c;color:#c9c9cc;border-bottom:1px solid #2a2a2c;display:flex;justify-content:space-between;}
+    .viewport-frame{display:block;background:var(--surface-base,#FCFCFB);}
+    .viewport-mobile .viewport-frame{width:390px;height:844px;margin:0 auto;overflow-y:auto;}
+    .viewport-desktop .viewport-frame{width:100%;height:900px;overflow-y:auto;}
+    .frame{font-family:var(--font-sans);color:var(--text-primary);background:var(--surface-base);min-height:100%;}
+
+    .topbar{background:var(--surface-elevated);border-bottom:1px solid var(--border-subtle);height:56px;display:flex;align-items:center;padding:0 var(--sp-4);gap:var(--sp-3);position:sticky;top:0;z-index:20;}
+    .topbar-title{font-size:18px;font-weight:600;letter-spacing:-0.005em;}
+    .topbar-spacer{flex:1;}
+    .topbar-icon-btn{width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;background:transparent;border:none;border-radius:var(--rad-md);cursor:pointer;color:var(--text-secondary);}
+    .topbar-icon-btn:hover{background:var(--surface-sunken);color:var(--text-primary);}
+    .desktop .topbar{height:64px;padding:0 var(--sp-8);}
+    .desktop .topbar-brand{display:flex;align-items:center;gap:var(--sp-3);margin-right:var(--sp-8);}
+    .desktop .topbar-logo{width:28px;height:28px;border-radius:var(--rad-md);background:var(--brand-primary);display:inline-flex;align-items:center;justify-content:center;color:var(--brand-onPrimary);font-size:14px;font-weight:700;}
+    .desktop .topbar-nav{display:flex;gap:var(--sp-2);}
+    .desktop .topbar-nav a{padding:8px 12px;font-size:14px;color:var(--text-secondary);text-decoration:none;border-radius:var(--rad-md);font-weight:500;position:relative;}
+    .desktop .topbar-nav a.active{color:var(--text-primary);}
+    .desktop .topbar-nav a.active::after{content:'';position:absolute;left:12px;right:12px;bottom:-22px;height:2px;background:var(--brand-primary);}
+
+    main{padding:var(--sp-4);padding-bottom:96px;}
+    .desktop main{padding:var(--sp-8) var(--sp-12);max-width:920px;margin:0 auto;}
+    .page-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);}
+    .page-head h1{font-size:24px;font-weight:600;letter-spacing:-0.015em;margin:0;}
+    .desktop .page-head h1{font-size:30px;letter-spacing:-0.02em;}
+    .btn-primary{height:40px;padding:0 var(--sp-4);background:var(--brand-primary);color:var(--brand-onPrimary);border:none;border-radius:var(--rad-md);font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+    .btn-primary:hover{background:var(--brand-primaryHover);}
+
+    .list{background:var(--surface-elevated);border:1px solid var(--border-subtle);border-radius:var(--rad-lg);overflow:hidden;}
+    .row{display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-4);border-bottom:1px solid var(--border-subtle);cursor:pointer;text-decoration:none;color:inherit;}
+    .row:last-child{border-bottom:none;}
+    .row:hover{background:var(--surface-sunken);}
+    .cb{width:24px;height:24px;border-radius:var(--rad-sm);border:1.5px solid var(--border-strong);background:var(--surface-elevated);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .row.done .cb{background:var(--brand-primary);border-color:var(--brand-primary);}
+    .row.done .cb svg{display:block;}
+    .cb svg{display:none;}
+    .row-body{flex:1;min-width:0;}
+    .row-title{font-size:15px;font-weight:500;color:var(--text-primary);}
+    .row.done .row-title{color:var(--text-secondary);}
+    .row-meta{font-size:12px;color:var(--text-muted);margin-top:2px;}
+
+    .streak{display:inline-flex;align-items:center;gap:var(--sp-2);height:22px;padding:0 var(--sp-2) 0 4px;border-radius:var(--rad-full);background:var(--streak-subtle);border:1px solid var(--streak-border);color:var(--streak-text);font-size:12px;font-weight:500;}
+    .streak-counter{width:14px;height:14px;border-radius:var(--rad-full);background:var(--streak-fill);color:#fff;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;line-height:1;}
+    .streak.subtle{background:var(--surface-sunken);border-color:var(--border-subtle);color:var(--text-muted);}
+    .streak.subtle .streak-counter{background:var(--border-strong);color:var(--text-secondary);}
+
+    /* Inline mini-heatmap (last 7 days) */
+    .mini7{display:flex;gap:3px;margin-top:6px;}
+    .mini7 .c{width:10px;height:10px;border-radius:2px;background:var(--surface-sunken);}
+    .mini7 .c.on{background:var(--state-success);}
+    .mini7 .c.muted{background:var(--surface-sunken);opacity:0.6;}
+
+    .bottombar{position:fixed;bottom:0;left:0;right:0;background:var(--surface-elevated);border-top:1px solid var(--border-subtle);height:64px;display:flex;z-index:20;}
+    .desktop .bottombar{display:none;}
+    .bottombar a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--text-muted);text-decoration:none;font-size:11px;font-weight:500;}
+    .bottombar a.active{color:var(--brand-primary);}
+    .bottombar a svg{width:22px;height:22px;}
+  </style>
+</head>
+<body>
+  <div class="mockup-controls">
+    <h1>RoutineForge / habits-list.html</h1>
+    <span style="opacity:0.5;font-size:12px">5 habits · streaks shown · last-7-days mini-heatmap on desktop rows</span>
+  </div>
+
+  <div class="mockup-grid">
+    <!-- Light mobile -->
+    <div class="viewport viewport-mobile">
+      <div class="viewport-label"><span>Light · Mobile · 390 × 844</span><span>list with streak badges</span></div>
+      <div class="viewport-frame">
+        <div class="frame theme-light mobile">
+          <header class="topbar">
+            <div class="topbar-title">Habits</div>
+            <div class="topbar-spacer"></div>
+            <button class="topbar-icon-btn" aria-label="Add habit"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+          </header>
+          <main>
+            <div class="list">
+              <a href="#" class="row done">
+                <span class="cb"><svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="#FFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 6 3 3 5-6"/></svg></span>
+                <div class="row-body">
+                  <div class="row-title">Drink 2L water</div>
+                  <div class="row-meta">Daily</div>
+                </div>
+                <span class="streak"><span class="streak-counter">12</span>day streak</span>
+              </a>
+              <a href="#" class="row done">
+                <span class="cb"><svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="#FFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 6 3 3 5-6"/></svg></span>
+                <div class="row-body">
+                  <div class="row-title">Read 20 minutes</div>
+                  <div class="row-meta">5 per week · 4 of 5 this week</div>
+                </div>
+                <span class="streak"><span class="streak-counter">31</span>day streak</span>
+              </a>
+              <a href="#" class="row">
+                <span class="cb"></span>
+                <div class="row-body">
+                  <div class="row-title">Stretch — 10 min</div>
+                  <div class="row-meta">Mon · Wed · Fri</div>
+                </div>
+                <span class="streak"><span class="streak-counter">3</span>day streak</span>
+              </a>
+              <a href="#" class="row">
+                <span class="cb"></span>
+                <div class="row-body">
+                  <div class="row-title">No phone after 10 PM</div>
+                  <div class="row-meta">Daily</div>
+                </div>
+                <span class="streak subtle"><span class="streak-counter">0</span>Start streak</span>
+              </a>
+              <a href="#" class="row">
+                <span class="cb"></span>
+                <div class="row-body">
+                  <div class="row-title">Journal 3 lines</div>
+                  <div class="row-meta">Daily</div>
+                </div>
+                <span class="streak"><span class="streak-counter">7</span>day streak</span>
+              </a>
+            </div>
+          </main>
+          <nav class="bottombar" aria-label="Primary">
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Today</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Routines</a>
+            <a href="#" class="active" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-7 4 14 3-7h4"/></svg>Habits</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Account</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dark mobile -->
+    <div class="viewport viewport-mobile">
+      <div class="viewport-label"><span>Dark · Mobile · 390 × 844</span><span>same content</span></div>
+      <div class="viewport-frame">
+        <div class="frame theme-dark mobile">
+          <header class="topbar">
+            <div class="topbar-title">Habits</div>
+            <div class="topbar-spacer"></div>
+            <button class="topbar-icon-btn" aria-label="Add habit"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+          </header>
+          <main>
+            <div class="list">
+              <a href="#" class="row done">
+                <span class="cb"><svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="#0E1013" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 6 3 3 5-6"/></svg></span>
+                <div class="row-body"><div class="row-title">Drink 2L water</div><div class="row-meta">Daily</div></div>
+                <span class="streak"><span class="streak-counter">12</span>day streak</span>
+              </a>
+              <a href="#" class="row done">
+                <span class="cb"><svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="#0E1013" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 6 3 3 5-6"/></svg></span>
+                <div class="row-body"><div class="row-title">Read 20 minutes</div><div class="row-meta">5 per week · 4 of 5 this week</div></div>
+                <span class="streak"><span class="streak-counter">31</span>day streak</span>
+              </a>
+              <a href="#" class="row">
+                <span class="cb"></span>
+                <div class="row-body"><div class="row-title">Stretch — 10 min</div><div class="row-meta">Mon · Wed · Fri</div></div>
+                <span class="streak"><span class="streak-counter">3</span>day streak</span>
+              </a>
+              <a href="#" class="row">
+                <span class="cb"></span>
+                <div class="row-body"><div class="row-title">No phone after 10 PM</div><div class="row-meta">Daily</div></div>
+                <span class="streak subtle"><span class="streak-counter">0</span>Start streak</span>
+              </a>
+              <a href="#" class="row">
+                <span class="cb"></span>
+                <div class="row-body"><div class="row-title">Journal 3 lines</div><div class="row-meta">Daily</div></div>
+                <span class="streak"><span class="streak-counter">7</span>day streak</span>
+              </a>
+            </div>
+          </main>
+          <nav class="bottombar">
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Today</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Routines</a>
+            <a href="#" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-7 4 14 3-7h4"/></svg>Habits</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Account</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <!-- Light desktop -->
+    <div class="viewport viewport-desktop" style="grid-column:1 / -1;">
+      <div class="viewport-label"><span>Light · Desktop · 1440</span><span>+ inline 7-day mini-heatmap per row</span></div>
+      <div class="viewport-frame">
+        <div class="frame theme-light desktop">
+          <header class="topbar">
+            <div class="topbar-brand"><span class="topbar-logo">R</span><span style="font-size:15px;font-weight:600">RoutineForge</span></div>
+            <nav class="topbar-nav">
+              <a href="#">Today</a>
+              <a href="#">Routines</a>
+              <a href="#" class="active" aria-current="page">Habits</a>
+              <a href="#">Account</a>
+            </nav>
+            <div class="topbar-spacer"></div>
+            <button class="topbar-icon-btn" aria-label="Account menu"><span style="width:32px;height:32px;border-radius:9999px;background:#DDDFDB;color:#404549;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:600">SG</span></button>
+          </header>
+          <main>
+            <div class="page-head">
+              <h1>Habits</h1>
+              <button class="btn-primary"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>New habit</button>
+            </div>
+            <div class="list">
+              <a href="#" class="row done">
+                <span class="cb"><svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="#FFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 6 3 3 5-6"/></svg></span>
+                <div class="row-body">
+                  <div class="row-title">Drink 2L water</div>
+                  <div class="row-meta">Daily · 9:00 AM check-in</div>
+                  <div class="mini7"><span class="c on"></span><span class="c on"></span><span class="c on"></span><span class="c on"></span><span class="c on"></span><span class="c on"></span><span class="c on"></span></div>
+                </div>
+                <span class="streak"><span class="streak-counter">12</span>day streak</span>
+              </a>
+              <a href="#" class="row done">
+                <span class="cb"><svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="#FFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 6 3 3 5-6"/></svg></span>
+                <div class="row-body">
+                  <div class="row-title">Read 20 minutes</div>
+                  <div class="row-meta">5 per week · 4 of 5 this week</div>
+                  <div class="mini7"><span class="c on"></span><span class="c on"></span><span class="c on"></span><span class="c"></span><span class="c on"></span><span class="c"></span><span class="c on"></span></div>
+                </div>
+                <span class="streak"><span class="streak-counter">31</span>day streak</span>
+              </a>
+              <a href="#" class="row">
+                <span class="cb"></span>
+                <div class="row-body">
+                  <div class="row-title">Stretch — 10 min</div>
+                  <div class="row-meta">Mon · Wed · Fri</div>
+                  <div class="mini7"><span class="c on"></span><span class="c muted"></span><span class="c on"></span><span class="c muted"></span><span class="c on"></span><span class="c muted"></span><span class="c muted"></span></div>
+                </div>
+                <span class="streak"><span class="streak-counter">3</span>day streak</span>
+              </a>
+              <a href="#" class="row">
+                <span class="cb"></span>
+                <div class="row-body">
+                  <div class="row-title">No phone after 10 PM</div>
+                  <div class="row-meta">Daily</div>
+                  <div class="mini7"><span class="c"></span><span class="c"></span><span class="c"></span><span class="c"></span><span class="c"></span><span class="c"></span><span class="c"></span></div>
+                </div>
+                <span class="streak subtle"><span class="streak-counter">0</span>Start streak</span>
+              </a>
+              <a href="#" class="row">
+                <span class="cb"></span>
+                <div class="row-body">
+                  <div class="row-title">Journal 3 lines</div>
+                  <div class="row-meta">Daily · 10:00 PM check-in</div>
+                  <div class="mini7"><span class="c on"></span><span class="c on"></span><span class="c on"></span><span class="c on"></span><span class="c on"></span><span class="c on"></span><span class="c on"></span></div>
+                </div>
+                <span class="streak"><span class="streak-counter">7</span>day streak</span>
+              </a>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dark desktop -->
+    <div class="viewport viewport-desktop" style="grid-column:1 / -1;">
+      <div class="viewport-label"><span>Dark · Desktop · 1440</span><span>same content</span></div>
+      <div class="viewport-frame">
+        <div class="frame theme-dark desktop">
+          <header class="topbar">
+            <div class="topbar-brand"><span class="topbar-logo">R</span><span style="font-size:15px;font-weight:600">RoutineForge</span></div>
+            <nav class="topbar-nav">
+              <a href="#">Today</a>
+              <a href="#">Routines</a>
+              <a href="#" class="active" aria-current="page">Habits</a>
+              <a href="#">Account</a>
+            </nav>
+            <div class="topbar-spacer"></div>
+            <button class="topbar-icon-btn" aria-label="Account menu"><span style="width:32px;height:32px;border-radius:9999px;background:#383D43;color:#ECEEF1;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:600">SG</span></button>
+          </header>
+          <main>
+            <div class="page-head">
+              <h1>Habits</h1>
+              <button class="btn-primary"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>New habit</button>
+            </div>
+            <div class="list">
+              <a href="#" class="row done">
+                <span class="cb"><svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="#0E1013" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 6 3 3 5-6"/></svg></span>
+                <div class="row-body"><div class="row-title">Drink 2L water</div><div class="row-meta">Daily · 9:00 AM check-in</div>
+                  <div class="mini7"><span class="c on"></span><span class="c on"></span><span class="c on"></span><span class="c on"></span><span class="c on"></span><span class="c on"></span><span class="c on"></span></div>
+                </div>
+                <span class="streak"><span class="streak-counter">12</span>day streak</span>
+              </a>
+              <a href="#" class="row done">
+                <span class="cb"><svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="#0E1013" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 6 3 3 5-6"/></svg></span>
+                <div class="row-body"><div class="row-title">Read 20 minutes</div><div class="row-meta">5 per week · 4 of 5 this week</div>
+                  <div class="mini7"><span class="c on"></span><span class="c on"></span><span class="c on"></span><span class="c"></span><span class="c on"></span><span class="c"></span><span class="c on"></span></div>
+                </div>
+                <span class="streak"><span class="streak-counter">31</span>day streak</span>
+              </a>
+              <a href="#" class="row">
+                <span class="cb"></span>
+                <div class="row-body"><div class="row-title">Stretch — 10 min</div><div class="row-meta">Mon · Wed · Fri</div>
+                  <div class="mini7"><span class="c on"></span><span class="c muted"></span><span class="c on"></span><span class="c muted"></span><span class="c on"></span><span class="c muted"></span><span class="c muted"></span></div>
+                </div>
+                <span class="streak"><span class="streak-counter">3</span>day streak</span>
+              </a>
+              <a href="#" class="row">
+                <span class="cb"></span>
+                <div class="row-body"><div class="row-title">No phone after 10 PM</div><div class="row-meta">Daily</div>
+                  <div class="mini7"><span class="c"></span><span class="c"></span><span class="c"></span><span class="c"></span><span class="c"></span><span class="c"></span><span class="c"></span></div>
+                </div>
+                <span class="streak subtle"><span class="streak-counter">0</span>Start streak</span>
+              </a>
+              <a href="#" class="row">
+                <span class="cb"></span>
+                <div class="row-body"><div class="row-title">Journal 3 lines</div><div class="row-meta">Daily · 10:00 PM check-in</div>
+                  <div class="mini7"><span class="c on"></span><span class="c on"></span><span class="c on"></span><span class="c on"></span><span class="c on"></span><span class="c on"></span><span class="c on"></span></div>
+                </div>
+                <span class="streak"><span class="streak-counter">7</span>day streak</span>
+              </a>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

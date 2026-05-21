@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RoutineForge — Habit detail (mockup)</title>
+  <style>
+    :root { --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px; --sp-6: 24px; --sp-8: 32px; --sp-10: 40px; --sp-12: 48px; --font-sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI Variable", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; --rad-sm: 4px; --rad-md: 6px; --rad-lg: 10px; --rad-xl: 14px; --rad-full: 9999px; }
+    .theme-light { --surface-base:#FCFCFB;--surface-elevated:#FFFFFF;--surface-sunken:#ECEDEA;--text-primary:#15171A;--text-secondary:#404549;--text-muted:#71767C;--text-onAccent:#FFFFFF;--border-subtle:#DDDFDB;--border-strong:#C7CAC5;--brand-primary:#1F5A99;--brand-primaryHover:#2C6AAA;--brand-primarySubtle:#EAF2FB;--brand-onPrimary:#FFFFFF;--state-success:#377C33;--state-successSubtle:#EEF6EE;--state-successBorder:#A8D0A7;--state-warning:#A06D1F;--state-warningSubtle:#FBF3E2;--state-warningBorder:#ECC881;--focus-ring:#1F5A99;--streak-fill:#C2872A;--streak-subtle:#FBF3E2;--streak-text:#5F4014;--streak-border:#ECC881;--heat-0:#ECEDEA;--heat-1:#D5E8D5;--heat-2:#A8D0A7;--heat-3:#4D9249;--heat-4:#2C6529;--heat-today:#1F5A99;--shadow-1:0 1px 2px 0 rgba(15,17,20,0.06),0 1px 1px 0 rgba(15,17,20,0.04);--shadow-3:0 6px 12px -3px rgba(15,17,20,0.08),0 2px 4px -1px rgba(15,17,20,0.05); }
+    .theme-dark { --surface-base:#0E1013;--surface-elevated:#1E2125;--surface-sunken:#08090B;--text-primary:#ECEEF1;--text-secondary:#B7BCC2;--text-muted:#8A9097;--text-onAccent:#0E1013;--border-subtle:#262A2F;--border-strong:#383D43;--brand-primary:#6FA8DC;--brand-primaryHover:#5C97CD;--brand-primarySubtle:rgba(111,168,220,0.12);--brand-onPrimary:#0E1013;--state-success:#6DB46A;--state-successSubtle:rgba(109,180,106,0.12);--state-successBorder:rgba(109,180,106,0.32);--state-warning:#D4A24A;--state-warningSubtle:rgba(212,162,74,0.12);--state-warningBorder:rgba(212,162,74,0.32);--focus-ring:#6FA8DC;--streak-fill:#D4A24A;--streak-subtle:rgba(212,162,74,0.14);--streak-text:#EAC889;--streak-border:rgba(212,162,74,0.36);--heat-0:#1A1D21;--heat-1:rgba(109,180,106,0.18);--heat-2:rgba(109,180,106,0.36);--heat-3:rgba(109,180,106,0.62);--heat-4:#6DB46A;--heat-today:#6FA8DC;--shadow-1:0 1px 2px 0 rgba(0,0,0,0.40);--shadow-3:0 8px 16px -4px rgba(0,0,0,0.55),0 2px 4px -1px rgba(0,0,0,0.35); }
+
+    html,body { margin:0; padding:0; font-family: var(--font-sans); background:#0a0a0b; color:#ECEEF1; }
+    body { padding: var(--sp-6); }
+    .mockup-controls { display:flex;gap:var(--sp-3);align-items:center;margin-bottom:var(--sp-6);flex-wrap:wrap; }
+    .mockup-controls h1 { font-size:14px;font-weight:600;margin:0;opacity:0.7;letter-spacing:0.04em;text-transform:uppercase; }
+    .mockup-grid { display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-6);align-items:start; }
+    @media (max-width:1100px) { .mockup-grid { grid-template-columns:1fr; } }
+    .viewport { border:1px solid #2a2a2c;border-radius:12px;overflow:hidden;background:#1a1a1c; }
+    .viewport-label { font-size:12px;padding:var(--sp-2) var(--sp-3);background:#1a1a1c;color:#c9c9cc;border-bottom:1px solid #2a2a2c;display:flex;justify-content:space-between; }
+    .viewport-frame { display:block;background:var(--surface-base,#FCFCFB); }
+    .viewport-mobile .viewport-frame { width:390px;height:844px;margin:0 auto;overflow-y:auto;overflow-x:hidden; }
+    .viewport-desktop .viewport-frame { width:100%;height:900px;overflow-y:auto; }
+
+    .frame { font-family:var(--font-sans);color:var(--text-primary);background:var(--surface-base);min-height:100%; }
+
+    .topbar { background:var(--surface-elevated);border-bottom:1px solid var(--border-subtle);height:56px;display:flex;align-items:center;padding:0 var(--sp-2);gap:var(--sp-2);position:sticky;top:0;z-index:20; }
+    .topbar-title { font-size:18px;font-weight:600;letter-spacing:-0.005em;flex:1;text-align:center;padding-right:80px; }
+    .topbar-icon-btn { width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;background:transparent;border:none;border-radius:var(--rad-md);cursor:pointer;color:var(--text-secondary); }
+    .topbar-icon-btn:hover { background:var(--surface-sunken);color:var(--text-primary); }
+    .topbar-action { padding:0 12px;height:40px;font-size:14px;font-weight:500;color:var(--brand-primary);background:transparent;border:none;cursor:pointer;border-radius:var(--rad-md); }
+    .topbar-action:hover { background:var(--surface-sunken); }
+    .desktop .topbar { height:64px;padding:0 var(--sp-8); }
+    .desktop .topbar-title { display:none; }
+    .desktop .topbar-brand { display:flex;align-items:center;gap:var(--sp-3);margin-right:var(--sp-8); }
+    .desktop .topbar-logo { width:28px;height:28px;border-radius:var(--rad-md);background:var(--brand-primary);display:inline-flex;align-items:center;justify-content:center;color:var(--brand-onPrimary);font-size:14px;font-weight:700; }
+    .desktop .topbar-nav { display:flex;gap:var(--sp-2); }
+    .desktop .topbar-nav a { padding:8px 12px;font-size:14px;color:var(--text-secondary);text-decoration:none;border-radius:var(--rad-md);font-weight:500;position:relative; }
+    .desktop .topbar-nav a.active { color:var(--text-primary); }
+    .desktop .topbar-nav a.active::after { content:'';position:absolute;left:12px;right:12px;bottom:-22px;height:2px;background:var(--brand-primary); }
+    .desktop .topbar-spacer { flex:1; }
+
+    main { padding: var(--sp-4); padding-bottom: 96px; }
+    .desktop main { padding: var(--sp-8) var(--sp-12); max-width: 920px; margin: 0 auto; }
+    .breadcrumb { font-size:13px;color:var(--text-muted);display:flex;align-items:center;gap:6px;margin-bottom:var(--sp-3); }
+    .breadcrumb a { color:var(--text-secondary);text-decoration:none; }
+
+    /* Hero header */
+    .hero { display:flex;align-items:flex-start;justify-content:space-between;gap:var(--sp-4);margin-bottom:var(--sp-6); }
+    .hero h1 { font-size:30px;font-weight:600;letter-spacing:-0.02em;margin:0 0 var(--sp-2); }
+    .mobile .hero h1 { font-size:24px;letter-spacing:-0.015em; }
+    .hero-meta { font-size:14px;color:var(--text-secondary);display:flex;align-items:center;gap:8px;flex-wrap:wrap; }
+
+    /* StreakBadge large */
+    .streak.large { display:inline-flex;align-items:center;gap:var(--sp-2);height:36px;padding:0 var(--sp-3);border-radius:var(--rad-full);background:var(--streak-subtle);border:1px solid var(--streak-border);color:var(--streak-text);font-size:14px;font-weight:500; }
+    .streak-counter-lg { width:22px;height:22px;border-radius:var(--rad-full);background:var(--streak-fill);color:#fff;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;line-height:1; }
+
+    /* Today's completion: a hero-tier checkbox */
+    .today-check { display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-4);background:var(--surface-elevated);border:1px solid var(--border-subtle);border-radius:var(--rad-lg);margin-bottom:var(--sp-6); }
+    .today-check.done { background:var(--brand-primarySubtle);border-color:var(--brand-primary); }
+    .today-check .cb { width:24px;height:24px;border-radius:var(--rad-sm);border:1.5px solid var(--border-strong);background:var(--surface-elevated);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer; }
+    .today-check.done .cb { background:var(--brand-primary);border-color:var(--brand-primary); }
+    .today-check.done .cb svg { display:block; }
+    .today-check .cb svg { display:none; }
+    .today-check .label { font-size:15px;font-weight:500;flex:1; }
+    .today-check .micro { font-size:12px;color:var(--text-muted);margin-top:2px; }
+
+    /* Stat tiles */
+    .stats { display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-3);margin-bottom:var(--sp-6); }
+    .stat { padding:var(--sp-4);background:var(--surface-elevated);border:1px solid var(--border-subtle);border-radius:var(--rad-lg); }
+    .stat .v { font-size:28px;font-weight:600;letter-spacing:-0.015em;color:var(--text-primary);line-height:1.1; }
+    .stat .l { font-size:12px;color:var(--text-muted);margin-top:6px;letter-spacing:0.04em;text-transform:uppercase;font-weight:500; }
+
+    /* Heatmap */
+    .heatmap-section { background:var(--surface-elevated);border:1px solid var(--border-subtle);border-radius:var(--rad-lg);padding:var(--sp-5); }
+    .mobile .heatmap-section { padding:var(--sp-4); }
+    .heatmap-title { display:flex;align-items:baseline;justify-content:space-between;margin-bottom:var(--sp-3); }
+    .heatmap-title h2 { font-size:14px;font-weight:600;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase;margin:0; }
+    .heatmap-title .summary { font-size:13px;color:var(--text-secondary); }
+    .heatmap-grid { display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:3px;align-items:start; }
+    .heatmap-cell { width:12px;height:12px;border-radius:var(--rad-sm);background:var(--heat-0); }
+    .heatmap-cell.h1 { background:var(--heat-1); }
+    .heatmap-cell.h2 { background:var(--heat-2); }
+    .heatmap-cell.h3 { background:var(--heat-3); }
+    .heatmap-cell.h4 { background:var(--heat-4); }
+    .heatmap-cell.today { border:1.5px solid var(--heat-today); width:12px;height:12px;box-sizing:border-box; }
+    .heatmap-legend { display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-top:var(--sp-3);font-size:12px;color:var(--text-muted); }
+    .heatmap-legend .swatch { width:12px;height:12px;border-radius:var(--rad-sm); }
+
+    /* Cadence info & schedule chips */
+    .info-row { display:flex;flex-wrap:wrap;gap:var(--sp-3) var(--sp-6);padding:var(--sp-4) 0;border-top:1px solid var(--border-subtle);margin-top:var(--sp-5); }
+    .info-row .item { font-size:13px;color:var(--text-secondary); }
+    .info-row .item b { display:block;color:var(--text-primary);font-weight:500;font-size:14px;margin-top:2px; }
+
+    .badge { display:inline-flex;align-items:center;gap:6px;padding:0 var(--sp-2);height:22px;border-radius:var(--rad-full);font-size:12px;font-weight:500;border:1px solid transparent;background:var(--brand-primarySubtle);color:var(--brand-primary); }
+
+    .btn-secondary { height:40px;padding:0 var(--sp-4);background:var(--surface-elevated);color:var(--text-primary);border:1px solid var(--border-strong);border-radius:var(--rad-md);font-family:inherit;font-size:14px;font-weight:500;cursor:pointer; }
+  </style>
+</head>
+<body>
+  <div class="mockup-controls">
+    <h1>RoutineForge / habit-detail.html</h1>
+    <span style="opacity:0.5;font-size:12px">"Read 20 minutes" · 5-per-week · 31-day streak · realistic 90-day completion pattern</span>
+  </div>
+
+  <div class="mockup-grid">
+    <!-- ============================================= -->
+    <!-- LIGHT · MOBILE                                 -->
+    <!-- ============================================= -->
+    <div class="viewport viewport-mobile">
+      <div class="viewport-label"><span>Light · Mobile · 390 × 844</span><span>StreakBadge.large + 90-day grid</span></div>
+      <div class="viewport-frame">
+        <div class="frame theme-light mobile" style="position:relative;height:100%">
+          <header class="topbar" role="banner">
+            <button class="topbar-icon-btn" aria-label="Back"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button>
+            <div class="topbar-title">Habit</div>
+            <button class="topbar-action">Edit</button>
+          </header>
+          <main>
+            <!-- Hero: name + cadence + streak -->
+            <div class="hero">
+              <div>
+                <h1>Read 20 minutes</h1>
+                <div class="hero-meta">
+                  <span class="badge">5 per week</span>
+                  <span>·</span>
+                  <span>9:00 PM reminder</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- StreakBadge large standalone -->
+            <div style="margin-bottom:var(--sp-5)">
+              <span class="streak large" aria-label="31 day streak">
+                <span class="streak-counter-lg">31</span>
+                day streak — best so far
+              </span>
+            </div>
+
+            <!-- Today's completion -->
+            <!-- bg surface.elevated, border border.subtle, radius lg -->
+            <div class="today-check done">
+              <span class="cb" role="checkbox" aria-checked="true" tabindex="0">
+                <svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="#FFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 6 3 3 5-6"/></svg>
+              </span>
+              <div>
+                <div class="label">Checked off for today</div>
+                <div class="micro">4 of 5 this week · 1 more by Sunday</div>
+              </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats">
+              <div class="stat"><div class="v">31</div><div class="l">Current</div></div>
+              <div class="stat"><div class="v">31</div><div class="l">Longest</div></div>
+              <div class="stat"><div class="v">147</div><div class="l">Total</div></div>
+            </div>
+
+            <!-- Heatmap -->
+            <section class="heatmap-section">
+              <div class="heatmap-title">
+                <h2>Last 90 days</h2>
+                <span class="summary">76 done</span>
+              </div>
+              <div class="heatmap-grid" role="grid" aria-label="90-day completion heatmap">
+                <!-- 13 weeks × 7 days. Realistic pattern: most days a "done" -->
+                <!-- Each column = week (Sun bottom to Sat top per common convention; here top=Sun for simplicity) -->
+                <!-- Use Helper repetition; generated for visual fidelity -->
+                <!-- Week 1 (oldest, 13 weeks ago) -->
+                <div class="heatmap-cell"></div><div class="heatmap-cell"></div><div class="heatmap-cell"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell"></div><div class="heatmap-cell h2"></div>
+                <div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell"></div>
+                <div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div>
+                <div class="heatmap-cell"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell"></div><div class="heatmap-cell h2"></div>
+                <div class="heatmap-cell h3"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell"></div><div class="heatmap-cell h2"></div>
+                <div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div>
+                <!-- streak starts here (week 7) -->
+                <div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div>
+                <div class="heatmap-cell h4"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div>
+                <div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h4"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div>
+                <div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h4"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div>
+                <div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h4"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div>
+                <div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div>
+                <!-- this week (current) -->
+                <div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3 today"></div><div class="heatmap-cell"></div><div class="heatmap-cell"></div><div class="heatmap-cell"></div><div class="heatmap-cell"></div>
+              </div>
+              <div class="heatmap-legend">
+                Less
+                <span class="swatch" style="background:var(--heat-0)"></span>
+                <span class="swatch" style="background:var(--heat-1)"></span>
+                <span class="swatch" style="background:var(--heat-2)"></span>
+                <span class="swatch" style="background:var(--heat-3)"></span>
+                <span class="swatch" style="background:var(--heat-4)"></span>
+                More
+              </div>
+              <!-- Cadence row -->
+              <div class="info-row">
+                <div class="item">Cadence<b>5 per week</b></div>
+                <div class="item">Reminder<b>9:00 PM</b></div>
+                <div class="item">Started<b>Feb 14</b></div>
+              </div>
+            </section>
+          </main>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================= -->
+    <!-- DARK · MOBILE                                  -->
+    <!-- ============================================= -->
+    <div class="viewport viewport-mobile">
+      <div class="viewport-label"><span>Dark · Mobile · 390 × 844</span><span>same content, dark-mode heatmap stops</span></div>
+      <div class="viewport-frame">
+        <div class="frame theme-dark mobile" style="position:relative;height:100%">
+          <header class="topbar" role="banner">
+            <button class="topbar-icon-btn" aria-label="Back"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button>
+            <div class="topbar-title">Habit</div>
+            <button class="topbar-action">Edit</button>
+          </header>
+          <main>
+            <div class="hero">
+              <div>
+                <h1>Read 20 minutes</h1>
+                <div class="hero-meta">
+                  <span class="badge">5 per week</span>
+                  <span>·</span>
+                  <span>9:00 PM reminder</span>
+                </div>
+              </div>
+            </div>
+            <div style="margin-bottom:var(--sp-5)">
+              <span class="streak large"><span class="streak-counter-lg">31</span>day streak — best so far</span>
+            </div>
+            <div class="today-check done">
+              <span class="cb"><svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="#0E1013" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 6 3 3 5-6"/></svg></span>
+              <div>
+                <div class="label">Checked off for today</div>
+                <div class="micro">4 of 5 this week · 1 more by Sunday</div>
+              </div>
+            </div>
+            <div class="stats">
+              <div class="stat"><div class="v">31</div><div class="l">Current</div></div>
+              <div class="stat"><div class="v">31</div><div class="l">Longest</div></div>
+              <div class="stat"><div class="v">147</div><div class="l">Total</div></div>
+            </div>
+            <section class="heatmap-section">
+              <div class="heatmap-title"><h2>Last 90 days</h2><span class="summary">76 done</span></div>
+              <div class="heatmap-grid">
+                <div class="heatmap-cell"></div><div class="heatmap-cell"></div><div class="heatmap-cell"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell"></div><div class="heatmap-cell h2"></div>
+                <div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell"></div>
+                <div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div>
+                <div class="heatmap-cell"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell"></div><div class="heatmap-cell h2"></div>
+                <div class="heatmap-cell h3"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell"></div><div class="heatmap-cell h2"></div>
+                <div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div>
+                <div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div>
+                <div class="heatmap-cell h4"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div>
+                <div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h4"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div>
+                <div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h4"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div>
+                <div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h4"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div>
+                <div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div>
+                <div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3 today"></div><div class="heatmap-cell"></div><div class="heatmap-cell"></div><div class="heatmap-cell"></div><div class="heatmap-cell"></div>
+              </div>
+              <div class="heatmap-legend">
+                Less
+                <span class="swatch" style="background:var(--heat-0)"></span>
+                <span class="swatch" style="background:var(--heat-1)"></span>
+                <span class="swatch" style="background:var(--heat-2)"></span>
+                <span class="swatch" style="background:var(--heat-3)"></span>
+                <span class="swatch" style="background:var(--heat-4)"></span>
+                More
+              </div>
+              <div class="info-row">
+                <div class="item">Cadence<b>5 per week</b></div>
+                <div class="item">Reminder<b>9:00 PM</b></div>
+                <div class="item">Started<b>Feb 14</b></div>
+              </div>
+            </section>
+          </main>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================= -->
+    <!-- LIGHT · DESKTOP                                -->
+    <!-- ============================================= -->
+    <div class="viewport viewport-desktop" style="grid-column: 1 / -1;">
+      <div class="viewport-label"><span>Light · Desktop · 1440 viewport</span><span>2-col: heatmap left · checkin + stats right</span></div>
+      <div class="viewport-frame">
+        <div class="frame theme-light desktop">
+          <header class="topbar" role="banner">
+            <div class="topbar-brand"><span class="topbar-logo">R</span><span style="font-size:15px;font-weight:600">RoutineForge</span></div>
+            <nav class="topbar-nav" aria-label="Primary">
+              <a href="#">Today</a>
+              <a href="#">Routines</a>
+              <a href="#" class="active" aria-current="page">Habits</a>
+              <a href="#">Account</a>
+            </nav>
+            <div class="topbar-spacer"></div>
+            <button class="topbar-icon-btn" aria-label="Account menu"><span style="width:32px;height:32px;border-radius:9999px;background:#DDDFDB;color:#404549;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:600">SG</span></button>
+          </header>
+          <main>
+            <div class="breadcrumb"><a href="#">Habits</a><span>/</span><span style="color:var(--text-primary)">Read 20 minutes</span></div>
+            <div class="hero">
+              <div>
+                <h1>Read 20 minutes</h1>
+                <div class="hero-meta">
+                  <span class="badge">5 per week</span>
+                  <span>·</span>
+                  <span>9:00 PM reminder</span>
+                  <span>·</span>
+                  <span>Started Feb 14</span>
+                </div>
+              </div>
+              <span class="streak large"><span class="streak-counter-lg">31</span>day streak</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 320px;gap:32px;align-items:start;margin-top:var(--sp-4)">
+              <section class="heatmap-section">
+                <div class="heatmap-title"><h2>Last 90 days</h2><span class="summary">76 completions · best week: 7</span></div>
+                <div class="heatmap-grid">
+                  <div class="heatmap-cell"></div><div class="heatmap-cell"></div><div class="heatmap-cell"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell"></div><div class="heatmap-cell h2"></div>
+                  <div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell"></div>
+                  <div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div>
+                  <div class="heatmap-cell"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell"></div><div class="heatmap-cell h2"></div>
+                  <div class="heatmap-cell h3"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell"></div><div class="heatmap-cell h2"></div>
+                  <div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div>
+                  <div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div>
+                  <div class="heatmap-cell h4"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div>
+                  <div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h4"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div>
+                  <div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h4"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div>
+                  <div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h4"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div>
+                  <div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div>
+                  <div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3 today"></div><div class="heatmap-cell"></div><div class="heatmap-cell"></div><div class="heatmap-cell"></div><div class="heatmap-cell"></div>
+                </div>
+                <div class="heatmap-legend">
+                  Less
+                  <span class="swatch" style="background:var(--heat-0)"></span>
+                  <span class="swatch" style="background:var(--heat-1)"></span>
+                  <span class="swatch" style="background:var(--heat-2)"></span>
+                  <span class="swatch" style="background:var(--heat-3)"></span>
+                  <span class="swatch" style="background:var(--heat-4)"></span>
+                  More
+                </div>
+              </section>
+              <aside>
+                <div class="today-check done">
+                  <span class="cb"><svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="#FFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 6 3 3 5-6"/></svg></span>
+                  <div>
+                    <div class="label">Checked off for today</div>
+                    <div class="micro">4 of 5 this week</div>
+                  </div>
+                </div>
+                <div class="stats" style="grid-template-columns:1fr 1fr;margin-bottom:var(--sp-4)">
+                  <div class="stat"><div class="v">31</div><div class="l">Current</div></div>
+                  <div class="stat"><div class="v">31</div><div class="l">Longest</div></div>
+                  <div class="stat" style="grid-column:1 / -1"><div class="v">147</div><div class="l">Total completions</div></div>
+                </div>
+                <button class="btn-secondary" style="width:100%">Mark complete for a past day</button>
+              </aside>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================= -->
+    <!-- DARK · DESKTOP                                 -->
+    <!-- ============================================= -->
+    <div class="viewport viewport-desktop" style="grid-column: 1 / -1;">
+      <div class="viewport-label"><span>Dark · Desktop · 1440 viewport</span><span>dark heatmap reads cleanly on near-black surfaces</span></div>
+      <div class="viewport-frame">
+        <div class="frame theme-dark desktop">
+          <header class="topbar" role="banner">
+            <div class="topbar-brand"><span class="topbar-logo">R</span><span style="font-size:15px;font-weight:600">RoutineForge</span></div>
+            <nav class="topbar-nav" aria-label="Primary">
+              <a href="#">Today</a>
+              <a href="#">Routines</a>
+              <a href="#" class="active" aria-current="page">Habits</a>
+              <a href="#">Account</a>
+            </nav>
+            <div class="topbar-spacer"></div>
+            <button class="topbar-icon-btn" aria-label="Account menu"><span style="width:32px;height:32px;border-radius:9999px;background:#383D43;color:#ECEEF1;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:600">SG</span></button>
+          </header>
+          <main>
+            <div class="breadcrumb"><a href="#">Habits</a><span>/</span><span style="color:var(--text-primary)">Read 20 minutes</span></div>
+            <div class="hero">
+              <div>
+                <h1>Read 20 minutes</h1>
+                <div class="hero-meta">
+                  <span class="badge">5 per week</span>
+                  <span>·</span>
+                  <span>9:00 PM reminder</span>
+                  <span>·</span>
+                  <span>Started Feb 14</span>
+                </div>
+              </div>
+              <span class="streak large"><span class="streak-counter-lg">31</span>day streak</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 320px;gap:32px;align-items:start;margin-top:var(--sp-4)">
+              <section class="heatmap-section">
+                <div class="heatmap-title"><h2>Last 90 days</h2><span class="summary">76 completions · best week: 7</span></div>
+                <div class="heatmap-grid">
+                  <div class="heatmap-cell"></div><div class="heatmap-cell"></div><div class="heatmap-cell"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell"></div><div class="heatmap-cell h2"></div>
+                  <div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell"></div>
+                  <div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div>
+                  <div class="heatmap-cell"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell"></div><div class="heatmap-cell h2"></div>
+                  <div class="heatmap-cell h3"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell"></div><div class="heatmap-cell h2"></div>
+                  <div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h2"></div><div class="heatmap-cell h3"></div>
+                  <div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div>
+                  <div class="heatmap-cell h4"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div>
+                  <div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h4"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div>
+                  <div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h4"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div>
+                  <div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h4"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div>
+                  <div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div>
+                  <div class="heatmap-cell h3"></div><div class="heatmap-cell h3"></div><div class="heatmap-cell h3 today"></div><div class="heatmap-cell"></div><div class="heatmap-cell"></div><div class="heatmap-cell"></div><div class="heatmap-cell"></div>
+                </div>
+                <div class="heatmap-legend">
+                  Less
+                  <span class="swatch" style="background:var(--heat-0)"></span>
+                  <span class="swatch" style="background:var(--heat-1)"></span>
+                  <span class="swatch" style="background:var(--heat-2)"></span>
+                  <span class="swatch" style="background:var(--heat-3)"></span>
+                  <span class="swatch" style="background:var(--heat-4)"></span>
+                  More
+                </div>
+              </section>
+              <aside>
+                <div class="today-check done">
+                  <span class="cb"><svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="#0E1013" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 6 3 3 5-6"/></svg></span>
+                  <div>
+                    <div class="label">Checked off for today</div>
+                    <div class="micro">4 of 5 this week</div>
+                  </div>
+                </div>
+                <div class="stats" style="grid-template-columns:1fr 1fr;margin-bottom:var(--sp-4)">
+                  <div class="stat"><div class="v">31</div><div class="l">Current</div></div>
+                  <div class="stat"><div class="v">31</div><div class="l">Longest</div></div>
+                  <div class="stat" style="grid-column:1 / -1"><div class="v">147</div><div class="l">Total completions</div></div>
+                </div>
+                <button class="btn-secondary" style="width:100%">Mark complete for a past day</button>
+              </aside>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

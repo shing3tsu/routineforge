@@ -1,0 +1,155 @@
+/*
+ * Dialog — primitive for destructive / confirmation flows.
+ *
+ * Layout chrome only. The visual primitives (button shapes, card surface
+ * radius/shadow tokens) come from design/base.css + design/tokens.css.
+ * Nothing here invents colors / spacing / motion values — every value
+ * references a token. See design/components.md for the spec; the Dialog
+ * itself isn't documented there yet but it borrows directly from the
+ * `--hero` card treatment (pillowy 28px radius, generous interior padding).
+ *
+ * Mobile (≤640px): bottom-sheet anchored to the viewport bottom, full-width
+ * minus an inset on either side. Rounded top corners only — feels like a
+ * surface lifting out of the bottom edge of the screen, which matches the
+ * "calmer treatment" the design ethos asks for over the SaaS-stock
+ * "drag-handle-fingernail" bottom sheet.
+ *
+ * Desktop (>640px): centered card, max 440px wide. Generous padding inside.
+ *
+ * Animations:
+ *   - Backdrop fades in / out (200ms / 140ms `var(--e-standard)`).
+ *   - Card scales 0.96 → 1 + fades in over 220ms `var(--e-soft)` on open;
+ *     reverses faster (140ms) on close.
+ *   - Both collapse to opacity-only @ 1ms under prefers-reduced-motion
+ *     (the global rule in design/base.css already overrides durations; the
+ *     transforms below also fall back gracefully because keyframes are
+ *     bypassed by the global override).
+ */
+
+/* ── Backdrop ─────────────────────────────────────────────────────────── */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--c-surface-overlay);
+  z-index: var(--z-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  animation: dialogBackdropIn 200ms var(--e-standard) forwards;
+}
+
+.backdropClosing {
+  animation: dialogBackdropOut 140ms var(--e-standard) forwards;
+}
+
+@keyframes dialogBackdropIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes dialogBackdropOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ── Card ─────────────────────────────────────────────────────────────── */
+.card {
+  position: relative;
+  z-index: var(--z-modal);
+  background: var(--c-surface-elevated);
+  border-radius: var(--r-2xl);
+  box-shadow: var(--sh-xl), var(--sh-inner);
+  padding: var(--s-6);
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  opacity: 0;
+  transform: scale(0.96);
+  animation: dialogCardIn 220ms var(--e-soft) forwards;
+}
+
+.cardClosing {
+  animation: dialogCardOut 140ms var(--e-standard) forwards;
+}
+
+@keyframes dialogCardIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes dialogCardOut {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.96); }
+}
+
+/* Mobile bottom-sheet treatment. Anchor to the bottom edge of the viewport
+   with a small inset so the rounded corners are visible against the wash.
+   Rounded top corners only — the bottom safe-area inset becomes part of the
+   surface (no gap below the action buttons on devices with a home indicator). */
+@media (max-width: 640px) {
+  .backdrop {
+    align-items: flex-end;
+    padding: var(--s-4);
+    padding-bottom: max(var(--s-4), env(safe-area-inset-bottom));
+  }
+  .card {
+    max-width: none;
+  }
+}
+
+/* ── Header (title + description) ─────────────────────────────────────── */
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  letter-spacing: var(--tr-snug);
+  line-height: var(--lh-xl);
+  color: var(--c-text-primary);
+}
+
+.description {
+  margin: 0;
+  font-size: var(--fs-base);
+  line-height: var(--lh-lg);
+  color: var(--c-text-secondary);
+}
+
+/* ── Body (optional children slot) ─────────────────────────────────────── */
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+/* ── Footer (Cancel + Primary) ─────────────────────────────────────────── */
+.footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: var(--s-3);
+  margin-top: var(--s-2);
+}
+
+.footer > button {
+  min-width: 120px;
+}
+
+/* Mobile: stack vertically, primary on top (thumb-friendly per design notes). */
+@media (max-width: 640px) {
+  .footer {
+    flex-direction: column-reverse;
+    gap: var(--s-2);
+  }
+  .footer > button {
+    width: 100%;
+    min-width: 0;
+  }
+}

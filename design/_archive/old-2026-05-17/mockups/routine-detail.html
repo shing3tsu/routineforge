@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RoutineForge — Routine detail (mockup)</title>
+  <style>
+    :root { --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px; --sp-6: 24px; --sp-8: 32px; --sp-10: 40px; --sp-12: 48px; --font-sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI Variable", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; --rad-sm: 4px; --rad-md: 6px; --rad-lg: 10px; --rad-xl: 14px; --rad-full: 9999px; }
+    .theme-light { --surface-base:#FCFCFB;--surface-elevated:#FFFFFF;--surface-sunken:#ECEDEA;--text-primary:#15171A;--text-secondary:#404549;--text-muted:#71767C;--text-onAccent:#FFFFFF;--border-subtle:#DDDFDB;--border-strong:#C7CAC5;--brand-primary:#1F5A99;--brand-primaryHover:#2C6AAA;--brand-primarySubtle:#EAF2FB;--brand-onPrimary:#FFFFFF;--state-success:#377C33;--state-successSubtle:#EEF6EE;--state-successBorder:#A8D0A7;--state-warning:#A06D1F;--state-warningSubtle:#FBF3E2;--state-warningBorder:#ECC881;--state-danger:#A0342B;--state-dangerSubtle:#FBEDEC;--state-dangerBorder:#E8A6A1;--focus-ring:#1F5A99;--shadow-1:0 1px 2px 0 rgba(15,17,20,0.06),0 1px 1px 0 rgba(15,17,20,0.04);--shadow-2:0 2px 4px -1px rgba(15,17,20,0.07),0 1px 2px 0 rgba(15,17,20,0.05);--shadow-3:0 6px 12px -3px rgba(15,17,20,0.08),0 2px 4px -1px rgba(15,17,20,0.05); }
+    .theme-dark { --surface-base:#0E1013;--surface-elevated:#1E2125;--surface-sunken:#08090B;--text-primary:#ECEEF1;--text-secondary:#B7BCC2;--text-muted:#8A9097;--text-onAccent:#0E1013;--border-subtle:#262A2F;--border-strong:#383D43;--brand-primary:#6FA8DC;--brand-primaryHover:#5C97CD;--brand-primarySubtle:rgba(111,168,220,0.12);--brand-onPrimary:#0E1013;--state-success:#6DB46A;--state-successSubtle:rgba(109,180,106,0.12);--state-successBorder:rgba(109,180,106,0.32);--state-warning:#D4A24A;--state-warningSubtle:rgba(212,162,74,0.12);--state-warningBorder:rgba(212,162,74,0.32);--state-danger:#D9716A;--state-dangerSubtle:rgba(217,113,106,0.12);--state-dangerBorder:rgba(217,113,106,0.32);--focus-ring:#6FA8DC;--shadow-1:0 1px 2px 0 rgba(0,0,0,0.40);--shadow-2:0 2px 4px -1px rgba(0,0,0,0.50),0 1px 2px 0 rgba(0,0,0,0.35);--shadow-3:0 8px 16px -4px rgba(0,0,0,0.55),0 2px 4px -1px rgba(0,0,0,0.35); }
+
+    html,body { margin:0; padding:0; font-family: var(--font-sans); background:#0a0a0b; color:#ECEEF1; }
+    body { padding: var(--sp-6); }
+    .mockup-controls { display:flex;gap:var(--sp-3);align-items:center;margin-bottom:var(--sp-6);flex-wrap:wrap; }
+    .mockup-controls h1 { font-size:14px;font-weight:600;margin:0;opacity:0.7;letter-spacing:0.04em;text-transform:uppercase; }
+    .mockup-grid { display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-6);align-items:start; }
+    @media (max-width:1100px) { .mockup-grid { grid-template-columns:1fr; } }
+    .viewport { border:1px solid #2a2a2c;border-radius:12px;overflow:hidden;background:#1a1a1c; }
+    .viewport-label { font-size:12px;padding:var(--sp-2) var(--sp-3);background:#1a1a1c;color:#c9c9cc;border-bottom:1px solid #2a2a2c;display:flex;justify-content:space-between; }
+    .viewport-frame { display:block;background:var(--surface-base,#FCFCFB); }
+    .viewport-mobile .viewport-frame { width:390px;height:844px;margin:0 auto;overflow-y:auto;overflow-x:hidden; }
+    .viewport-desktop .viewport-frame { width:100%;height:900px;overflow-y:auto; }
+
+    .frame { font-family:var(--font-sans);color:var(--text-primary);background:var(--surface-base);min-height:100%; }
+
+    /* TopBar (mobile back+title pattern) */
+    .topbar { background:var(--surface-elevated);border-bottom:1px solid var(--border-subtle);height:56px;display:flex;align-items:center;padding:0 var(--sp-2) 0 var(--sp-1);gap:var(--sp-2);position:sticky;top:0;z-index:20; }
+    .topbar-title { font-size:18px;font-weight:600;letter-spacing:-0.005em;flex:1;text-align:center;padding-right:80px; }
+    .topbar-icon-btn { width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;background:transparent;border:none;border-radius:var(--rad-md);cursor:pointer;color:var(--text-secondary); }
+    .topbar-icon-btn:hover { background:var(--surface-sunken);color:var(--text-primary); }
+    .topbar-action { padding:0 12px;height:40px;font-size:14px;font-weight:500;color:var(--brand-primary);background:transparent;border:none;cursor:pointer;border-radius:var(--rad-md); }
+    .topbar-action:hover { background:var(--surface-sunken); }
+    .desktop .topbar { height:64px;padding:0 var(--sp-8); }
+    .desktop .topbar-title { font-size:0;text-align:left;padding-right:0; }
+    .desktop .topbar-brand { display:flex;align-items:center;gap:var(--sp-3);margin-right:var(--sp-8); }
+    .desktop .topbar-logo { width:28px;height:28px;border-radius:var(--rad-md);background:var(--brand-primary);display:inline-flex;align-items:center;justify-content:center;color:var(--brand-onPrimary);font-size:14px;font-weight:700; }
+    .desktop .topbar-nav { display:flex;gap:var(--sp-2);flex:0; }
+    .desktop .topbar-nav a { padding:8px 12px;font-size:14px;color:var(--text-secondary);text-decoration:none;border-radius:var(--rad-md);font-weight:500;position:relative; }
+    .desktop .topbar-nav a.active { color:var(--text-primary); }
+    .desktop .topbar-nav a.active::after { content:'';position:absolute;left:12px;right:12px;bottom:-22px;height:2px;background:var(--brand-primary); }
+    .desktop .topbar-spacer { flex:1; }
+
+    main { padding: var(--sp-4); padding-bottom: 96px; }
+    .desktop main { padding: var(--sp-8) var(--sp-12); max-width: 920px; margin: 0 auto; }
+
+    /* Breadcrumb (desktop) */
+    .breadcrumb { font-size:13px;color:var(--text-muted);display:flex;align-items:center;gap:6px;margin-bottom:var(--sp-3); }
+    .breadcrumb a { color:var(--text-secondary);text-decoration:none; }
+    .breadcrumb a:hover { color:var(--text-primary); }
+
+    /* Heading block */
+    .heading h1 { font-size:30px;font-weight:600;letter-spacing:-0.02em;margin:0 0 var(--sp-2); }
+    .mobile .heading h1 { font-size:24px; letter-spacing:-0.015em; }
+    .heading p { font-size:15px;color:var(--text-secondary);margin:0;line-height:1.55;max-width:640px; }
+
+    /* Section card wrapper */
+    .section { background:var(--surface-elevated);border:1px solid var(--border-subtle);border-radius:var(--rad-lg);padding:var(--sp-5);margin-top:var(--sp-6); }
+    .mobile .section { padding: var(--sp-4); margin-top: var(--sp-5); }
+    .section h2 { font-size:14px;font-weight:600;color:var(--text-muted);margin:0 0 var(--sp-3);letter-spacing:0.08em;text-transform:uppercase; }
+
+    /* WeekdayChips */
+    .chips { display:flex;gap:var(--sp-2);flex-wrap:wrap; }
+    .chip { height:36px;min-width:36px;padding:0 var(--sp-3);background:var(--surface-elevated);color:var(--text-secondary);border:1px solid var(--border-strong);border-radius:var(--rad-full);font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;justify-content:center; }
+    .chip:hover { background:var(--surface-sunken); }
+    .chip.active { background:var(--brand-primary);color:var(--brand-onPrimary);border-color:var(--brand-primary); }
+    .chip.active:hover { background:var(--brand-primaryHover); }
+    .chip-helper { font-size:13px;color:var(--text-secondary);margin-top:var(--sp-3); }
+
+    /* DayStepEditor — tabs */
+    .day-tabs { display:flex;gap:0;border-bottom:1px solid var(--border-subtle);margin-bottom:var(--sp-4); }
+    .day-tab { padding:var(--sp-2) var(--sp-3);background:transparent;border:none;border-bottom:2px solid transparent;font-family:inherit;font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;flex:1; }
+    .day-tab:hover { color:var(--text-primary); }
+    .day-tab.active { color:var(--text-primary);font-weight:600;border-bottom-color:var(--brand-primary); }
+    .day-tab .dot { width:4px;height:4px;border-radius:50%;background:var(--text-muted); }
+    .day-tab.empty .dot { background:var(--text-muted); }
+    .day-tab.active .dot { background:transparent; }
+
+    /* Mobile segmented control day strip */
+    .mobile .day-tabs { background:var(--surface-sunken);padding:var(--sp-1);border:none;border-radius:var(--rad-full); }
+    .mobile .day-tab { padding:var(--sp-2);font-size:12px;border-radius:var(--rad-full);border:none; }
+    .mobile .day-tab.active { background:var(--surface-elevated);box-shadow:var(--shadow-1); }
+
+    /* Step rows in editor */
+    .step-row { display:flex;align-items:center;gap:var(--sp-2);padding:var(--sp-2) 0;border-bottom:1px solid transparent; }
+    .step-row:hover { border-bottom-color: var(--border-subtle); }
+    .step-handle { color:var(--text-muted);display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;cursor:grab; }
+    .step-row:hover .step-handle { color:var(--text-secondary); }
+    .step-num { width:24px;color:var(--text-muted);font-size:12px;text-align:right; }
+    .step-input { flex:1;border:none;background:transparent;font-family:inherit;font-size:14px;color:var(--text-primary);padding:8px 0; outline: none; border-bottom:1px solid transparent; }
+    .step-row:hover .step-input { border-bottom-color: var(--border-subtle); }
+    .step-input:focus { border-bottom-color: var(--brand-primary); }
+    .step-input::placeholder { color: var(--text-muted); }
+    .step-kebab { color:var(--text-muted);background:transparent;border:none;cursor:pointer;width:32px;height:32px;border-radius:var(--rad-md);display:inline-flex;align-items:center;justify-content:center; }
+    .step-kebab:hover { background:var(--surface-sunken);color:var(--text-secondary); }
+
+    /* Focused row (illustrates focus-visible state) */
+    .step-row.focused .step-input { border-bottom-color: var(--brand-primary); }
+
+    /* Add step */
+    .step-add { display:inline-flex;align-items:center;gap:6px;background:transparent;border:none;color:var(--brand-primary);font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;padding:var(--sp-3) 0; }
+    .step-add:hover { color: var(--brand-primaryHover); }
+
+    /* Empty (rest day) state */
+    .rest-empty { text-align:center;padding:var(--sp-8) var(--sp-4); }
+    .rest-empty svg { color:var(--text-muted);margin-bottom:var(--sp-3); }
+    .rest-empty .empty-title { font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:4px; }
+    .rest-empty .empty-desc { font-size:13px;color:var(--text-secondary);margin-bottom:var(--sp-4); }
+    .btn-ghost { display:inline-flex;align-items:center;gap:6px;padding:8px 12px;background:transparent;border:none;color:var(--text-primary);font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;border-radius:var(--rad-md); }
+    .btn-ghost:hover { background:var(--surface-sunken); }
+
+    /* Bottom action bar (mobile saving) */
+    .mobile-action-bar { position:absolute;bottom:0;left:0;right:0;padding:var(--sp-3) var(--sp-4); background:var(--surface-elevated);border-top:1px solid var(--border-subtle);display:flex;gap:var(--sp-2); }
+    .btn-primary { flex:1;height:44px;padding:0 var(--sp-4);background:var(--brand-primary);color:var(--brand-onPrimary);border:none;border-radius:var(--rad-md);font-family:inherit;font-size:15px;font-weight:500;cursor:pointer; }
+    .btn-primary:hover { background:var(--brand-primaryHover); }
+    .btn-secondary { height:44px;padding:0 var(--sp-4);background:var(--surface-elevated);color:var(--text-primary);border:1px solid var(--border-strong);border-radius:var(--rad-md);font-family:inherit;font-size:15px;font-weight:500;cursor:pointer; }
+    .btn-secondary:hover { background:var(--surface-sunken); }
+
+    /* TextField for routine name on desktop edit-in-place */
+    .field-label { font-size:13px;font-weight:500;color:var(--text-secondary);display:block;margin-bottom:6px; }
+    .text-field { display:block;width:100%;height:40px;padding:0 var(--sp-3);background:var(--surface-elevated);color:var(--text-primary);border:1px solid var(--border-subtle);border-radius:var(--rad-md);font-family:inherit;font-size:15px;outline:none; }
+    .text-field:hover { border-color:var(--border-strong); }
+    .text-field:focus { border-color:var(--brand-primary); }
+
+    /* Action row right-aligned on desktop */
+    .action-row { display:flex;gap:var(--sp-3);justify-content:flex-end;margin-top:var(--sp-6); }
+  </style>
+</head>
+<body>
+  <div class="mockup-controls">
+    <h1>RoutineForge / routine-detail.html</h1>
+    <span style="opacity:0.5;font-size:12px">"Push day" · 5 weekdays scheduled · Sat = rest day · weekday tab "Tue" selected</span>
+  </div>
+
+  <div class="mockup-grid">
+    <!-- ============================================= -->
+    <!-- LIGHT · MOBILE                                 -->
+    <!-- ============================================= -->
+    <div class="viewport viewport-mobile">
+      <div class="viewport-label"><span>Light · Mobile · 390 × 844</span><span>weekday tab strip = SegmentedControl</span></div>
+      <div class="viewport-frame">
+        <div class="frame theme-light mobile" style="position:relative;height:100%">
+          <!-- TopBar: back + title + Edit action -->
+          <header class="topbar" role="banner">
+            <button class="topbar-icon-btn" aria-label="Back">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg>
+            </button>
+            <div class="topbar-title">Push day</div>
+            <button class="topbar-action">Edit</button>
+          </header>
+          <main>
+            <div class="heading">
+              <h1>Push day</h1>
+              <!-- text.secondary, type base -->
+              <p>Chest, shoulders and triceps. Adjust loads weekly; deload every 6th week.</p>
+            </div>
+
+            <!-- Section: schedule (weekday chips) -->
+            <section class="section" aria-labelledby="sched">
+              <h2 id="sched">Schedule</h2>
+              <!-- chips: spacing[2] gap, full radius. Active = brand.primary -->
+              <div class="chips" role="group" aria-label="Weekdays">
+                <button class="chip active" aria-pressed="true">Mo</button>
+                <button class="chip active" aria-pressed="true">Tu</button>
+                <button class="chip active" aria-pressed="true">We</button>
+                <button class="chip active" aria-pressed="true">Th</button>
+                <button class="chip active" aria-pressed="true">Fr</button>
+                <button class="chip" aria-pressed="false">Sa</button>
+                <button class="chip" aria-pressed="false">Su</button>
+              </div>
+              <div class="chip-helper">5 days a week · reminder at 6:30 PM</div>
+            </section>
+
+            <!-- Section: per-day steps (DayStepEditor) -->
+            <section class="section" aria-labelledby="steps">
+              <h2 id="steps">Steps by weekday</h2>
+              <!-- Day tabs (mobile = segmented control style) -->
+              <div class="day-tabs" role="tablist" aria-label="Weekdays">
+                <button class="day-tab" role="tab">Mo</button>
+                <button class="day-tab active" role="tab" aria-selected="true">Tu</button>
+                <button class="day-tab" role="tab">We</button>
+                <button class="day-tab" role="tab">Th</button>
+                <button class="day-tab" role="tab">Fr</button>
+                <button class="day-tab empty" role="tab">Sa</button>
+                <button class="day-tab empty" role="tab">Su</button>
+              </div>
+              <!-- Selected day = Tuesday, showing legs/triceps -->
+              <ul style="margin:0;padding:0;list-style:none">
+                <li class="step-row"><span class="step-handle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="5" x2="11" y2="5"/><line x1="3" y1="9" x2="11" y2="9"/></svg></span><span class="step-num">1.</span><input class="step-input" value="Warm up — band pull-aparts, 2×15" /><button class="step-kebab" aria-label="Step menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></li>
+                <li class="step-row"><span class="step-handle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="5" x2="11" y2="5"/><line x1="3" y1="9" x2="11" y2="9"/></svg></span><span class="step-num">2.</span><input class="step-input" value="Bench press — 4×6 @ 80kg" /><button class="step-kebab" aria-label="Step menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></li>
+                <li class="step-row focused"><span class="step-handle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="5" x2="11" y2="5"/><line x1="3" y1="9" x2="11" y2="9"/></svg></span><span class="step-num">3.</span><input class="step-input" value="Overhead press — 3×8 @ 45kg" /><button class="step-kebab" aria-label="Step menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></li>
+                <li class="step-row"><span class="step-handle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="5" x2="11" y2="5"/><line x1="3" y1="9" x2="11" y2="9"/></svg></span><span class="step-num">4.</span><input class="step-input" value="Incline dumbbell — 3×10" /><button class="step-kebab" aria-label="Step menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></li>
+                <li class="step-row"><span class="step-handle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="5" x2="11" y2="5"/><line x1="3" y1="9" x2="11" y2="9"/></svg></span><span class="step-num">5.</span><input class="step-input" value="Triceps pushdown — 3×12" /><button class="step-kebab" aria-label="Step menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></li>
+                <li class="step-row"><span class="step-handle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="5" x2="11" y2="5"/><line x1="3" y1="9" x2="11" y2="9"/></svg></span><span class="step-num">6.</span><input class="step-input" value="Cooldown stretch — 5 min" /><button class="step-kebab" aria-label="Step menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></li>
+              </ul>
+              <button class="step-add"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add step</button>
+            </section>
+          </main>
+          <div class="mobile-action-bar">
+            <button class="btn-secondary">Cancel</button>
+            <button class="btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================= -->
+    <!-- DARK · MOBILE                                  -->
+    <!-- ============================================= -->
+    <div class="viewport viewport-mobile">
+      <div class="viewport-label"><span>Dark · Mobile · 390 × 844</span><span>Saturday tab = rest day empty state</span></div>
+      <div class="viewport-frame">
+        <div class="frame theme-dark mobile" style="position:relative;height:100%">
+          <header class="topbar" role="banner">
+            <button class="topbar-icon-btn" aria-label="Back"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button>
+            <div class="topbar-title">Push day</div>
+            <button class="topbar-action">Edit</button>
+          </header>
+          <main>
+            <div class="heading">
+              <h1>Push day</h1>
+              <p>Chest, shoulders and triceps. Adjust loads weekly; deload every 6th week.</p>
+            </div>
+            <section class="section">
+              <h2>Schedule</h2>
+              <div class="chips" role="group" aria-label="Weekdays">
+                <button class="chip active">Mo</button>
+                <button class="chip active">Tu</button>
+                <button class="chip active">We</button>
+                <button class="chip active">Th</button>
+                <button class="chip active">Fr</button>
+                <button class="chip">Sa</button>
+                <button class="chip">Su</button>
+              </div>
+              <div class="chip-helper">5 days a week · reminder at 6:30 PM</div>
+            </section>
+            <section class="section">
+              <h2>Steps by weekday</h2>
+              <div class="day-tabs">
+                <button class="day-tab">Mo</button>
+                <button class="day-tab">Tu</button>
+                <button class="day-tab">We</button>
+                <button class="day-tab">Th</button>
+                <button class="day-tab">Fr</button>
+                <button class="day-tab active">Sa</button>
+                <button class="day-tab empty">Su</button>
+              </div>
+              <!-- Empty (rest day) -->
+              <div class="rest-empty">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+                <div class="empty-title">Rest day</div>
+                <div class="empty-desc">No steps for Saturday. Recovery is the point.</div>
+                <button class="btn-ghost"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add a step anyway</button>
+              </div>
+            </section>
+          </main>
+          <div class="mobile-action-bar">
+            <button class="btn-secondary">Cancel</button>
+            <button class="btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================= -->
+    <!-- LIGHT · DESKTOP                                -->
+    <!-- ============================================= -->
+    <div class="viewport viewport-desktop" style="grid-column: 1 / -1;">
+      <div class="viewport-label"><span>Light · Desktop · 1440 viewport</span><span>weekday tab strip = underlined Tabs</span></div>
+      <div class="viewport-frame">
+        <div class="frame theme-light desktop">
+          <header class="topbar" role="banner">
+            <div class="topbar-brand"><span class="topbar-logo">R</span><span style="font-size:15px;font-weight:600">RoutineForge</span></div>
+            <nav class="topbar-nav" aria-label="Primary">
+              <a href="#">Today</a>
+              <a href="#" class="active" aria-current="page">Routines</a>
+              <a href="#">Habits</a>
+              <a href="#">Account</a>
+            </nav>
+            <div class="topbar-spacer"></div>
+            <button class="topbar-icon-btn" aria-label="Account menu"><span style="width:32px;height:32px;border-radius:9999px;background:#DDDFDB;color:#404549;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:600">SG</span></button>
+          </header>
+          <main>
+            <div class="breadcrumb"><a href="#">Routines</a><span>/</span><span style="color:var(--text-primary)">Push day</span></div>
+            <div class="heading">
+              <h1>Push day</h1>
+              <p>Chest, shoulders and triceps. Adjust loads weekly; deload every 6th week.</p>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 320px;gap:32px;align-items:start;margin-top:24px">
+              <div>
+                <section class="section" style="margin-top:0">
+                  <h2>Steps by weekday</h2>
+                  <div class="day-tabs">
+                    <button class="day-tab">Mon</button>
+                    <button class="day-tab active">Tue</button>
+                    <button class="day-tab">Wed</button>
+                    <button class="day-tab">Thu</button>
+                    <button class="day-tab">Fri</button>
+                    <button class="day-tab empty">Sat</button>
+                    <button class="day-tab empty">Sun</button>
+                  </div>
+                  <ul style="margin:0;padding:0;list-style:none">
+                    <li class="step-row"><span class="step-handle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="5" x2="11" y2="5"/><line x1="3" y1="9" x2="11" y2="9"/></svg></span><span class="step-num">1.</span><input class="step-input" value="Warm up — band pull-aparts, 2×15" /><button class="step-kebab" aria-label="Step menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></li>
+                    <li class="step-row"><span class="step-handle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="5" x2="11" y2="5"/><line x1="3" y1="9" x2="11" y2="9"/></svg></span><span class="step-num">2.</span><input class="step-input" value="Bench press — 4×6 @ 80kg" /><button class="step-kebab" aria-label="Step menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></li>
+                    <li class="step-row focused"><span class="step-handle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="5" x2="11" y2="5"/><line x1="3" y1="9" x2="11" y2="9"/></svg></span><span class="step-num">3.</span><input class="step-input" value="Overhead press — 3×8 @ 45kg" /><button class="step-kebab" aria-label="Step menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></li>
+                    <li class="step-row"><span class="step-handle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="5" x2="11" y2="5"/><line x1="3" y1="9" x2="11" y2="9"/></svg></span><span class="step-num">4.</span><input class="step-input" value="Incline dumbbell — 3×10" /><button class="step-kebab" aria-label="Step menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></li>
+                    <li class="step-row"><span class="step-handle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="5" x2="11" y2="5"/><line x1="3" y1="9" x2="11" y2="9"/></svg></span><span class="step-num">5.</span><input class="step-input" value="Triceps pushdown — 3×12" /><button class="step-kebab" aria-label="Step menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></li>
+                    <li class="step-row"><span class="step-handle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="5" x2="11" y2="5"/><line x1="3" y1="9" x2="11" y2="9"/></svg></span><span class="step-num">6.</span><input class="step-input" value="Cooldown stretch — 5 min" /><button class="step-kebab" aria-label="Step menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></li>
+                  </ul>
+                  <button class="step-add"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add step</button>
+                </section>
+                <div class="action-row">
+                  <button class="btn-secondary">Cancel</button>
+                  <button class="btn-primary" style="flex:0">Save changes</button>
+                </div>
+              </div>
+              <aside>
+                <section class="section" style="margin-top:0">
+                  <h2>Schedule</h2>
+                  <div class="chips" role="group" aria-label="Weekdays">
+                    <button class="chip active">Mo</button>
+                    <button class="chip active">Tu</button>
+                    <button class="chip active">We</button>
+                    <button class="chip active">Th</button>
+                    <button class="chip active">Fr</button>
+                    <button class="chip">Sa</button>
+                    <button class="chip">Su</button>
+                  </div>
+                  <div class="chip-helper">5 days a week</div>
+                </section>
+                <section class="section">
+                  <h2>Notifications</h2>
+                  <label class="field-label">Reminder time</label>
+                  <input class="text-field" value="6:30 PM" />
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:var(--sp-3)">
+                    <span style="font-size:14px;color:var(--text-primary)">Enabled</span>
+                    <!-- inline switch on -->
+                    <span style="display:inline-block;width:36px;height:20px;background:var(--brand-primary);border-radius:9999px;position:relative">
+                      <span style="display:block;width:16px;height:16px;background:#fff;border-radius:50%;position:absolute;top:2px;left:18px"></span>
+                    </span>
+                  </div>
+                </section>
+              </aside>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================= -->
+    <!-- DARK · DESKTOP                                 -->
+    <!-- ============================================= -->
+    <div class="viewport viewport-desktop" style="grid-column: 1 / -1;">
+      <div class="viewport-label"><span>Dark · Desktop · 1440 viewport</span><span>Saturday tab selected = rest day</span></div>
+      <div class="viewport-frame">
+        <div class="frame theme-dark desktop">
+          <header class="topbar" role="banner">
+            <div class="topbar-brand"><span class="topbar-logo">R</span><span style="font-size:15px;font-weight:600">RoutineForge</span></div>
+            <nav class="topbar-nav" aria-label="Primary">
+              <a href="#">Today</a>
+              <a href="#" class="active" aria-current="page">Routines</a>
+              <a href="#">Habits</a>
+              <a href="#">Account</a>
+            </nav>
+            <div class="topbar-spacer"></div>
+            <button class="topbar-icon-btn" aria-label="Account menu"><span style="width:32px;height:32px;border-radius:9999px;background:#383D43;color:#ECEEF1;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:600">SG</span></button>
+          </header>
+          <main>
+            <div class="breadcrumb"><a href="#">Routines</a><span>/</span><span style="color:var(--text-primary)">Push day</span></div>
+            <div class="heading">
+              <h1>Push day</h1>
+              <p>Chest, shoulders and triceps. Adjust loads weekly; deload every 6th week.</p>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 320px;gap:32px;align-items:start;margin-top:24px">
+              <div>
+                <section class="section" style="margin-top:0">
+                  <h2>Steps by weekday</h2>
+                  <div class="day-tabs">
+                    <button class="day-tab">Mon</button>
+                    <button class="day-tab">Tue</button>
+                    <button class="day-tab">Wed</button>
+                    <button class="day-tab">Thu</button>
+                    <button class="day-tab">Fri</button>
+                    <button class="day-tab active">Sat</button>
+                    <button class="day-tab empty">Sun</button>
+                  </div>
+                  <div class="rest-empty">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+                    <div class="empty-title">Rest day</div>
+                    <div class="empty-desc">No steps for Saturday. Recovery is the point.</div>
+                    <button class="btn-ghost"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add a step anyway</button>
+                  </div>
+                </section>
+                <div class="action-row">
+                  <button class="btn-secondary">Cancel</button>
+                  <button class="btn-primary" style="flex:0">Save changes</button>
+                </div>
+              </div>
+              <aside>
+                <section class="section" style="margin-top:0">
+                  <h2>Schedule</h2>
+                  <div class="chips" role="group" aria-label="Weekdays">
+                    <button class="chip active">Mo</button>
+                    <button class="chip active">Tu</button>
+                    <button class="chip active">We</button>
+                    <button class="chip active">Th</button>
+                    <button class="chip active">Fr</button>
+                    <button class="chip">Sa</button>
+                    <button class="chip">Su</button>
+                  </div>
+                  <div class="chip-helper">5 days a week</div>
+                </section>
+                <section class="section">
+                  <h2>Notifications</h2>
+                  <label class="field-label">Reminder time</label>
+                  <input class="text-field" value="6:30 PM" />
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:var(--sp-3)">
+                    <span style="font-size:14px;color:var(--text-primary)">Enabled</span>
+                    <span style="display:inline-block;width:36px;height:20px;background:var(--brand-primary);border-radius:9999px;position:relative">
+                      <span style="display:block;width:16px;height:16px;background:#0E1013;border-radius:50%;position:absolute;top:2px;left:18px"></span>
+                    </span>
+                  </div>
+                </section>
+              </aside>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en" data-palette="bone" data-theme="light">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>RoutineForge — design exploration</title>
+  <meta name="theme-color" content="#C9543A"/>
+  <link rel="stylesheet" href="design/tokens.css"/>
+  <link rel="stylesheet" href="design/base.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    html, body { background: #f0eee9; }
+    body { font-family: var(--font-sans); margin: 0; }
+    /* canvas always renders against its own grid; cards inside use palette tokens */
+    .palette-host { position: relative; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- React + Babel -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="design-canvas.jsx"></script>
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+
+  <script type="text/babel" src="design/_bundle.jsx"></script>
+
+  <script type="text/babel" data-presets="react">
+    const DEFAULT_TWEAKS = /*EDITMODE-BEGIN*/{
+      "palette": "graphite",
+      "theme": "light",
+      "showSecondTheme": true
+    }/*EDITMODE-END*/;
+
+    // ── tiny mount helper: any artboard child is a function returning JSX
+    // with the active palette + theme applied; we render twice (light+dark)
+    // side-by-side when showSecondTheme is on.
+
+    function ThemePair({ palette, theme, second, Mobile, Desktop, kind = 'mobile', extraProps = {} }) {
+      const Cmp = kind === 'desktop' ? Desktop : Mobile;
+      const themes = second ? [theme, theme === 'dark' ? 'light' : 'dark'] : [theme];
+      return (
+        <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
+          {themes.map(t => (
+            <div key={t} className="palette-host">
+              <div style={{
+                position: 'absolute', top: -22, left: 8, fontFamily: 'var(--font-mono)',
+                fontSize: 10, letterSpacing: '.12em', textTransform: 'uppercase',
+                color: 'rgba(60,50,40,.7)',
+              }}>{t}</div>
+              <Cmp palette={palette} dark={t === 'dark'} {...extraProps}/>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    function App() {
+      const [t, setTweak] = useTweaks(DEFAULT_TWEAKS);
+      // active palette + theme cascaded onto <html>
+      React.useEffect(() => {
+        document.documentElement.setAttribute('data-palette', t.palette);
+        document.documentElement.setAttribute('data-theme', t.theme);
+      }, [t.palette, t.theme]);
+
+      const sharedProps = { palette: t.palette, theme: t.theme, second: t.showSecondTheme };
+
+      return (
+        <React.Fragment>
+          <RoughDefs/>
+          <DesignCanvas>
+
+            <DCSection
+              id="today"
+              title="Today view"
+              subtitle="THE screen — first thing in the morning. Hero numeral, the active routine expanded, others compact, habits below.">
+              <DCArtboard id="today-mobile" label="Mobile · 390" width={414} height={870}>
+                <ThemePair {...sharedProps} Mobile={TodayMobile} kind="mobile"/>
+              </DCArtboard>
+              <DCArtboard id="today-desktop" label="Desktop · 1280" width={1304} height={840}>
+                <ThemePair {...sharedProps} Desktop={TodayDesktop} kind="desktop" second={false}/>
+              </DCArtboard>
+              <DCArtboard id="today-desktop-dark" label="Desktop · dark" width={1304} height={840}>
+                <TodayDesktop palette={t.palette} dark={t.theme !== 'dark'}/>
+              </DCArtboard>
+            </DCSection>
+
+            <DCSection
+              id="routines"
+              title="Routines"
+              subtitle="List + detail. Detail features the DayStepEditor — weekday tab strip + reorderable step list. Saturday left as a rest day.">
+              <DCArtboard id="routines-mobile" label="List · mobile" width={414} height={870}>
+                <ThemePair {...sharedProps} Mobile={RoutinesMobile}/>
+              </DCArtboard>
+              <DCArtboard id="routine-detail-mobile" label="Detail · mobile" width={414} height={870}>
+                <ThemePair {...sharedProps} Mobile={RoutineDetailMobile}/>
+              </DCArtboard>
+              <DCArtboard id="routines-desktop" label="List · desktop" width={1304} height={840}>
+                <RoutinesDesktop palette={t.palette} dark={t.theme === 'dark'}/>
+              </DCArtboard>
+              <DCArtboard id="routine-detail-desktop" label="Detail · desktop" width={1304} height={840}>
+                <RoutineDetailDesktop palette={t.palette} dark={t.theme === 'dark'}/>
+              </DCArtboard>
+            </DCSection>
+
+            <DCSection
+              id="habits"
+              title="Habits"
+              subtitle="Streaks are neutral — just a number. Habit detail has the 90-day heatmap.">
+              <DCArtboard id="habits-mobile" label="List · mobile" width={414} height={870}>
+                <ThemePair {...sharedProps} Mobile={HabitsMobile}/>
+              </DCArtboard>
+              <DCArtboard id="habit-detail-mobile" label="Detail · mobile" width={414} height={870}>
+                <ThemePair {...sharedProps} Mobile={HabitDetailMobile}/>
+              </DCArtboard>
+              <DCArtboard id="habits-desktop" label="List · desktop" width={1304} height={840}>
+                <HabitsDesktop palette={t.palette} dark={t.theme === 'dark'}/>
+              </DCArtboard>
+              <DCArtboard id="habit-detail-desktop" label="Detail · desktop" width={1304} height={840}>
+                <HabitDetailDesktop palette={t.palette} dark={t.theme === 'dark'}/>
+              </DCArtboard>
+            </DCSection>
+
+            <DCSection
+              id="auth"
+              title="Sign-up & login"
+              subtitle="Email + password + Google. Marketing copy on the desktop left half, form on the right.">
+              <DCArtboard id="signup-mobile" label="Sign-up · mobile" width={414} height={870}>
+                <ThemePair {...sharedProps} Mobile={SignupMobile}/>
+              </DCArtboard>
+              <DCArtboard id="login-mobile" label="Log-in · mobile" width={414} height={870}>
+                <ThemePair {...sharedProps} Mobile={LoginMobile}/>
+              </DCArtboard>
+              <DCArtboard id="signup-desktop" label="Sign-up · desktop" width={1304} height={840}>
+                <SignupDesktop palette={t.palette} dark={t.theme === 'dark'}/>
+              </DCArtboard>
+              <DCArtboard id="login-desktop" label="Log-in · desktop" width={1304} height={840}>
+                <LoginDesktop palette={t.palette} dark={t.theme === 'dark'}/>
+              </DCArtboard>
+            </DCSection>
+
+            <DCSection
+              id="account"
+              title="Account"
+              subtitle="Profile, notification settings — master toggle + per-routine + per-habit time pickers.">
+              <DCArtboard id="account-mobile" label="Mobile" width={414} height={870}>
+                <ThemePair {...sharedProps} Mobile={AccountMobile}/>
+              </DCArtboard>
+              <DCArtboard id="account-desktop" label="Desktop" width={1304} height={840}>
+                <AccountDesktop palette={t.palette} dark={t.theme === 'dark'}/>
+              </DCArtboard>
+            </DCSection>
+
+            <DCSection
+              id="edges"
+              title="Empty · all-done · offline · install"
+              subtitle="Four edge states. Empty = first run; all-done = today is a closed loop; offline = read-only with a banner; install = non-intrusive bottom card.">
+              <DCArtboard id="empty-mobile" label="Empty · first run" width={414} height={870}>
+                <ThemePair {...sharedProps} Mobile={EmptyMobile}/>
+              </DCArtboard>
+              <DCArtboard id="alldone-mobile" label="All done today" width={414} height={870}>
+                <ThemePair {...sharedProps} Mobile={EmptyMobile} extraProps={{ allDone: true }}/>
+              </DCArtboard>
+              <DCArtboard id="offline-mobile" label="Offline" width={414} height={870}>
+                <ThemePair {...sharedProps} Mobile={OfflineMobile}/>
+              </DCArtboard>
+              <DCArtboard id="install-mobile" label="Install prompt" width={414} height={870}>
+                <ThemePair {...sharedProps} Mobile={InstallMobile}/>
+              </DCArtboard>
+              <DCArtboard id="empty-desktop" label="Empty · desktop" width={1304} height={840}>
+                <EmptyDesktop palette={t.palette} dark={t.theme === 'dark'}/>
+              </DCArtboard>
+              <DCArtboard id="install-desktop" label="Install · desktop" width={1304} height={840}>
+                <InstallDesktop palette={t.palette} dark={t.theme === 'dark'}/>
+              </DCArtboard>
+            </DCSection>
+
+            <DCPostIt top={40} left={40} rotate={-3} width={220}>
+              Soft-engineered: Arc's pillow × Reflect's restraint × Stoic's wash.
+              Sans body + mono numerals. Hand-drawn icons.
+            </DCPostIt>
+            <DCPostIt top={120} left={-220} rotate={4} width={200}>
+              Try each palette: bone (default warm), fog, sage, graphite.
+              Toggle theme. Both fully designed.
+            </DCPostIt>
+
+          </DesignCanvas>
+
+          <TweaksPanel title="Palette & theme">
+            <TweakSection label="Palette">
+              <PaletteSwatch
+                label="Brand"
+                value={t.palette}
+                onChange={(v) => setTweak('palette', v)}
+                options={[
+                  ['#C9543A','#F4EEDF','#FFE6DA','#5E4F3C'],
+                  ['#4F46E5','#F1F4F8','#E6E9FF','#4A5364'],
+                  ['#4A7C3A','#EEF2E5','#E2EFD3','#414C31'],
+                  ['#7C3AED','#F4F4F5','#ECE7FE','#4D4D54'],
+                ]}
+              />
+              <div style={{ display: 'flex', gap: 6, marginTop: -8, fontFamily: 'var(--font-mono)', fontSize: 10, color: '#666', textTransform: 'uppercase', letterSpacing: '.12em' }}>
+                <span style={{ flex: 1, textAlign: 'center' }}>bone</span>
+                <span style={{ flex: 1, textAlign: 'center' }}>fog</span>
+                <span style={{ flex: 1, textAlign: 'center' }}>sage</span>
+                <span style={{ flex: 1, textAlign: 'center' }}>graphite</span>
+              </div>
+            </TweakSection>
+            <TweakSection label="Theme">
+              <TweakRadio
+                label="Mode"
+                value={t.theme}
+                onChange={(v) => setTweak('theme', v)}
+                options={['light','dark']}
+              />
+              <TweakToggle
+                label="Show both themes side-by-side"
+                value={t.showSecondTheme}
+                onChange={(v) => setTweak('showSecondTheme', v)}
+              />
+            </TweakSection>
+          </TweaksPanel>
+        </React.Fragment>
+      );
+    }
+
+    // ── color-swatch mapping for TweakColor with palette-name values ──
+    // TweakColor's options/value type is colors, not palette keys; wrap it
+    // so the panel sees swatches and emits 'bone'|'fog'|'sage'|'graphite'.
+    const _BaseTweakColor = window.TweakColor;
+    function PaletteSwatch({ label, value, options, onChange }) {
+      const PALETTES = ['bone','fog','sage','graphite'];
+      const idx = PALETTES.indexOf(value);
+      const swatch = options[idx];
+      return (
+        <_BaseTweakColor label={label} value={swatch} options={options}
+          onChange={(v) => {
+            const i = options.findIndex(o => Array.isArray(o) ? o[0] === v[0] : o === v);
+            onChange(PALETTES[i] ?? 'bone');
+          }}/>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+  </script>
+</body>
+</html>

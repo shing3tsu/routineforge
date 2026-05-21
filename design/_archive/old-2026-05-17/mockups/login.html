@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RoutineForge — Login (mockup)</title>
+  <style>
+    :root { --sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:20px;--sp-6:24px;--sp-8:32px;--sp-10:40px;--sp-12:48px;--font-sans:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI Variable","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;--rad-sm:4px;--rad-md:6px;--rad-lg:10px;--rad-xl:14px;--rad-full:9999px; }
+    .theme-light { --surface-base:#FCFCFB;--surface-elevated:#FFFFFF;--surface-sunken:#ECEDEA;--text-primary:#15171A;--text-secondary:#404549;--text-muted:#71767C;--text-onAccent:#FFFFFF;--border-subtle:#DDDFDB;--border-strong:#C7CAC5;--brand-primary:#1F5A99;--brand-primaryHover:#2C6AAA;--brand-onPrimary:#FFFFFF;--state-danger:#A0342B;--state-dangerSubtle:#FBEDEC;--state-dangerBorder:#E8A6A1;--focus-ring:#1F5A99; }
+    .theme-dark { --surface-base:#0E1013;--surface-elevated:#1E2125;--surface-sunken:#08090B;--text-primary:#ECEEF1;--text-secondary:#B7BCC2;--text-muted:#8A9097;--text-onAccent:#0E1013;--border-subtle:#262A2F;--border-strong:#383D43;--brand-primary:#6FA8DC;--brand-primaryHover:#5C97CD;--brand-onPrimary:#0E1013;--state-danger:#D9716A;--state-dangerSubtle:rgba(217,113,106,0.12);--state-dangerBorder:rgba(217,113,106,0.32);--focus-ring:#6FA8DC; }
+
+    html,body{margin:0;padding:0;font-family:var(--font-sans);background:#0a0a0b;color:#ECEEF1;}
+    body{padding:var(--sp-6);}
+    .mockup-controls{display:flex;gap:var(--sp-3);align-items:center;margin-bottom:var(--sp-6);flex-wrap:wrap;}
+    .mockup-controls h1{font-size:14px;font-weight:600;margin:0;opacity:0.7;letter-spacing:0.04em;text-transform:uppercase;}
+    .mockup-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-6);align-items:start;}
+    @media (max-width:1100px){.mockup-grid{grid-template-columns:1fr;}}
+    .viewport{border:1px solid #2a2a2c;border-radius:12px;overflow:hidden;background:#1a1a1c;}
+    .viewport-label{font-size:12px;padding:var(--sp-2) var(--sp-3);background:#1a1a1c;color:#c9c9cc;border-bottom:1px solid #2a2a2c;display:flex;justify-content:space-between;}
+    .viewport-frame{display:block;background:var(--surface-base,#FCFCFB);}
+    .viewport-mobile .viewport-frame{width:390px;height:844px;margin:0 auto;overflow-y:auto;}
+    .viewport-desktop .viewport-frame{width:100%;height:900px;overflow-y:auto;}
+    .frame{font-family:var(--font-sans);color:var(--text-primary);background:var(--surface-base);min-height:100%;display:flex;flex-direction:column;}
+
+    .auth-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:var(--sp-8) var(--sp-4);}
+    .auth-card{width:100%;max-width:400px;}
+    .auth-brand{display:flex;align-items:center;gap:var(--sp-3);margin-bottom:var(--sp-8);}
+    .auth-logo{width:36px;height:36px;border-radius:var(--rad-md);background:var(--brand-primary);color:var(--brand-onPrimary);display:inline-flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;}
+    .auth-brandname{font-size:17px;font-weight:600;letter-spacing:-0.005em;}
+    h1.auth-title{font-size:30px;font-weight:600;letter-spacing:-0.02em;margin:0 0 var(--sp-2);}
+    .mobile h1.auth-title{font-size:24px;letter-spacing:-0.015em;}
+    .auth-sub{font-size:15px;color:var(--text-secondary);margin:0 0 var(--sp-6);line-height:1.55;}
+
+    .field{margin-bottom:var(--sp-4);}
+    .field-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+    .field label{display:block;font-size:13px;font-weight:500;color:var(--text-secondary);}
+    .field a.forgot{font-size:12px;color:var(--brand-primary);text-decoration:none;font-weight:500;}
+    .field a.forgot:hover{text-decoration:underline;}
+    .field input{width:100%;height:40px;padding:0 var(--sp-3);background:var(--surface-elevated);color:var(--text-primary);border:1px solid var(--border-subtle);border-radius:var(--rad-md);font-family:inherit;font-size:15px;outline:none;box-sizing:border-box;}
+    .field input:hover{border-color:var(--border-strong);}
+    .field input:focus{border-color:var(--brand-primary);outline:2px solid var(--focus-ring);outline-offset:1px;}
+    .field input.error{border-color:var(--state-danger);}
+    .field .err{font-size:12px;color:var(--state-danger);font-weight:500;margin-top:6px;}
+
+    /* Inline-error illustration (dark-only mockup) */
+    .error-banner{padding:var(--sp-3) var(--sp-4);background:var(--state-dangerSubtle);border:1px solid var(--state-dangerBorder);border-radius:var(--rad-md);color:var(--state-danger);font-size:13px;margin-bottom:var(--sp-4);}
+
+    .btn-primary{width:100%;height:44px;background:var(--brand-primary);color:var(--brand-onPrimary);border:none;border-radius:var(--rad-md);font-family:inherit;font-size:15px;font-weight:500;cursor:pointer;margin-top:var(--sp-2);}
+    .btn-primary:hover{background:var(--brand-primaryHover);}
+
+    .divider{display:flex;align-items:center;gap:var(--sp-3);margin:var(--sp-5) 0;color:var(--text-muted);font-size:12px;letter-spacing:0.04em;text-transform:uppercase;}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border-subtle);}
+    .btn-google{width:100%;height:44px;background:var(--surface-elevated);color:var(--text-primary);border:1px solid var(--border-strong);border-radius:var(--rad-md);font-family:inherit;font-size:15px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:var(--sp-2);}
+    .btn-google:hover{background:var(--surface-sunken);}
+    .auth-footer{text-align:center;margin-top:var(--sp-8);font-size:14px;color:var(--text-secondary);}
+    .auth-footer a{color:var(--brand-primary);text-decoration:none;font-weight:500;}
+
+    .desktop .frame{flex-direction:row;}
+    .desktop .auth-side{flex:1;background:var(--surface-sunken);display:flex;flex-direction:column;justify-content:space-between;padding:var(--sp-12);border-right:1px solid var(--border-subtle);}
+    .desktop .auth-side-body h2{font-size:36px;font-weight:600;letter-spacing:-0.02em;color:var(--text-primary);margin:0 0 var(--sp-4);max-width:24ch;line-height:1.2;}
+    .desktop .auth-side-body p{font-size:15px;color:var(--text-secondary);max-width:48ch;line-height:1.6;margin:0;}
+    .desktop .auth-side-footer{font-size:12px;color:var(--text-muted);}
+    .desktop .auth-wrap{flex:1;}
+  </style>
+</head>
+<body>
+  <div class="mockup-controls">
+    <h1>RoutineForge / login.html</h1>
+    <span style="opacity:0.5;font-size:12px">light = default · dark = with inline error</span>
+  </div>
+
+  <div class="mockup-grid">
+    <!-- Light mobile -->
+    <div class="viewport viewport-mobile">
+      <div class="viewport-label"><span>Light · Mobile · 390 × 844</span><span>default</span></div>
+      <div class="viewport-frame">
+        <div class="frame theme-light mobile">
+          <div class="auth-wrap">
+            <div class="auth-card">
+              <div class="auth-brand"><span class="auth-logo">R</span><span class="auth-brandname">RoutineForge</span></div>
+              <h1 class="auth-title">Welcome back</h1>
+              <p class="auth-sub">Sign in to your routines and habits.</p>
+              <div class="field"><label>Email</label><input type="email" placeholder="you@example.com" /></div>
+              <div class="field">
+                <div class="field-row"><label>Password</label><a class="forgot" href="#">Forgot?</a></div>
+                <input type="password" placeholder="Your password" />
+              </div>
+              <button class="btn-primary">Sign in</button>
+              <div class="divider">or</div>
+              <button class="btn-google">
+                <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.331C2.438 15.983 5.482 18 9 18z" fill="#34A853"/><path d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.962H.957A8.997 8.997 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.331z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.962L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+                Continue with Google
+              </button>
+              <p class="auth-footer">New here? <a href="#">Create an account</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dark mobile (with inline error) -->
+    <div class="viewport viewport-mobile">
+      <div class="viewport-label"><span>Dark · Mobile · 390 × 844</span><span>with inline error</span></div>
+      <div class="viewport-frame">
+        <div class="frame theme-dark mobile">
+          <div class="auth-wrap">
+            <div class="auth-card">
+              <div class="auth-brand"><span class="auth-logo">R</span><span class="auth-brandname">RoutineForge</span></div>
+              <h1 class="auth-title">Welcome back</h1>
+              <p class="auth-sub">Sign in to your routines and habits.</p>
+              <!-- Error banner -->
+              <div class="error-banner">Email or password is incorrect. Try again or reset your password.</div>
+              <div class="field"><label>Email</label><input type="email" value="sina@example.com" /></div>
+              <div class="field">
+                <div class="field-row"><label>Password</label><a class="forgot" href="#">Forgot?</a></div>
+                <input type="password" class="error" value="••••••••" />
+                <div class="err">Incorrect password</div>
+              </div>
+              <button class="btn-primary">Sign in</button>
+              <div class="divider">or</div>
+              <button class="btn-google">
+                <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.331C2.438 15.983 5.482 18 9 18z" fill="#34A853"/><path d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.962H.957A8.997 8.997 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.331z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.962L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+                Continue with Google
+              </button>
+              <p class="auth-footer">New here? <a href="#">Create an account</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Light desktop -->
+    <div class="viewport viewport-desktop" style="grid-column:1 / -1;">
+      <div class="viewport-label"><span>Light · Desktop · 1440</span><span>split panel</span></div>
+      <div class="viewport-frame">
+        <div class="frame theme-light desktop">
+          <aside class="auth-side">
+            <div class="auth-brand"><span class="auth-logo">R</span><span class="auth-brandname">RoutineForge</span></div>
+            <div class="auth-side-body">
+              <h2>Welcome back.</h2>
+              <p>Your routines are waiting. Today's list is one tap away on every device you sign in to.</p>
+            </div>
+            <div class="auth-side-footer">v0.1 · open beta</div>
+          </aside>
+          <div class="auth-wrap">
+            <div class="auth-card">
+              <h1 class="auth-title">Sign in</h1>
+              <p class="auth-sub">Use your email or continue with Google.</p>
+              <div class="field"><label>Email</label><input type="email" placeholder="you@example.com" /></div>
+              <div class="field">
+                <div class="field-row"><label>Password</label><a class="forgot" href="#">Forgot?</a></div>
+                <input type="password" placeholder="Your password" />
+              </div>
+              <button class="btn-primary">Sign in</button>
+              <div class="divider">or</div>
+              <button class="btn-google">
+                <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.331C2.438 15.983 5.482 18 9 18z" fill="#34A853"/><path d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.962H.957A8.997 8.997 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.331z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.962L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+                Continue with Google
+              </button>
+              <p class="auth-footer">New here? <a href="#">Create an account</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dark desktop -->
+    <div class="viewport viewport-desktop" style="grid-column:1 / -1;">
+      <div class="viewport-label"><span>Dark · Desktop · 1440</span><span>split panel</span></div>
+      <div class="viewport-frame">
+        <div class="frame theme-dark desktop">
+          <aside class="auth-side">
+            <div class="auth-brand"><span class="auth-logo">R</span><span class="auth-brandname">RoutineForge</span></div>
+            <div class="auth-side-body">
+              <h2>Welcome back.</h2>
+              <p>Your routines are waiting. Today's list is one tap away on every device you sign in to.</p>
+            </div>
+            <div class="auth-side-footer">v0.1 · open beta</div>
+          </aside>
+          <div class="auth-wrap">
+            <div class="auth-card">
+              <h1 class="auth-title">Sign in</h1>
+              <p class="auth-sub">Use your email or continue with Google.</p>
+              <div class="field"><label>Email</label><input type="email" placeholder="you@example.com" /></div>
+              <div class="field">
+                <div class="field-row"><label>Password</label><a class="forgot" href="#">Forgot?</a></div>
+                <input type="password" placeholder="Your password" />
+              </div>
+              <button class="btn-primary">Sign in</button>
+              <div class="divider">or</div>
+              <button class="btn-google">
+                <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.331C2.438 15.983 5.482 18 9 18z" fill="#34A853"/><path d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.962H.957A8.997 8.997 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.331z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.962L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+                Continue with Google
+              </button>
+              <p class="auth-footer">New here? <a href="#">Create an account</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

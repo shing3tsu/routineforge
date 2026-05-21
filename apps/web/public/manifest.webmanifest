@@ -1,0 +1,29 @@
+{
+  "name": "RoutineForge",
+  "short_name": "RoutineForge",
+  "description": "Routines you actually follow. Habits that actually stick.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#101012",
+  "theme_color": "#101012",
+  "categories": ["productivity", "lifestyle"],
+  "lang": "en",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable any"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="RoutineForge">
+  <!--
+    RoutineForge — primary icon.
+    A calm, geometric "R" monogram on the brand teal-blue (raw.brand[600] = #1F5A99).
+    Used at any size; the SVG scales without rasterization artifacts.
+  -->
+  <rect width="512" height="512" rx="96" ry="96" fill="#1F5A99"/>
+  <!--
+    "R" letterform, drawn as filled paths so it renders crisply at small sizes
+    where stroke widths would alias. Letterform is set in Inter SemiBold weight
+    proportions and centered with a slight optical shift to compensate for the
+    descender on the diagonal leg. Color is #FFFFFF (brand.onPrimary in light).
+  -->
+  <path fill="#FFFFFF" d="M167 122 H290 C347 122 388 159 388 213 C388 252 366 282 332 296 L398 390 H332 L274 308 H225 V390 H167 Z M225 178 V252 H285 C311 252 327 238 327 215 C327 192 311 178 285 178 Z"/>
+</svg>

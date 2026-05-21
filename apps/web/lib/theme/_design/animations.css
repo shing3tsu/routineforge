@@ -1,0 +1,297 @@
+/* design/animations.css
+   Celebration animations for completion moments on the today view.
+
+   Design ethos (from design/README.md):
+     - NO confetti, NO emoji, NO bouncy gradients, NO punishment on miss.
+     - Tasteful, brief, ambient. Acknowledge — do not interrupt.
+     - All durations <= 1 second.
+     - Spring + soft easings only. Standard motion tokens from tokens.css.
+
+   Reduced-motion: the base.css media query already shortens
+   `animation-duration` to 1ms for ALL elements:
+     @media (prefers-reduced-motion: reduce) {
+       *, *::before, *::after { animation-duration: 1ms !important; ... }
+     }
+   This file MUST be imported AFTER base.css so the user's
+   prefers-reduced-motion preference continues to win via that override.
+
+   Canonical source-of-truth: design/animations.css
+   Mirror (for Next.js css-loader resolution): apps/web/lib/theme/_design/animations.css
+   Both files must be kept in sync.                                          */
+
+/* ── 1. routine just-completed: gentle "settle" pop on the card ─────────
+   Triggered for ~500ms after the LAST step of a routine flips to done.
+   The card briefly scales up to 1.02 then back, on the spring easing. */
+@keyframes rf-celebrate-settle {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.02); }
+}
+
+/* ── 2. habit pop: streak numeral momentarily inflates ──────────────────
+   Triggered when a habit transitions incomplete -> complete for today.
+   Pop is slightly larger than the routine settle (1.15 vs 1.02) because
+   the streak numeral is small — it needs more amplitude to read.        */
+@keyframes rf-celebrate-pop {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.15); }
+}
+
+/* ── 3. tint pulse: ambient bg flash in success-subtle ──────────────────
+   Used on routine cards and habit rows to acknowledge the moment of
+   completion. Background fades in to the palette's success-subtle then
+   back to transparent over ~400ms. Very low intensity by design.       */
+@keyframes rf-celebrate-tint-pulse {
+  0%, 100% { background-color: transparent; }
+  50%      { background-color: var(--c-success-subtle); }
+}
+
+/* ── 4. day-clear wash: warm radial overlay on .rf-wash ─────────────────
+   The one ambient moment per day. Triggered when the things-left count
+   drops from N>0 to 0. Renders as an extra brand-primary-subtle radial
+   gradient on top of the existing wash, fading in for ~400ms and back
+   out for the same — total ~800ms.                                     */
+@keyframes rf-celebrate-wash-warm {
+  0%, 100% { opacity: 0; }
+  50%      { opacity: 0.5; }
+}
+
+/* ── 5. hero numeral morph: brief crossfade when the digit changes ─────
+   Used when the hero numeral re-renders (key-change pattern). Quick
+   fade + small upward translate, decelerating ease.                    */
+@keyframes rf-celebrate-num-morph {
+  0%   { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 6. subtitle crossfade for the "All done." swap ────────────────────
+   Used when the hero subtitle copy changes (all done vs N left). Plain
+   fade-in with decel ease — sibling-driven crossfade is overkill for
+   short copy.                                                          */
+@keyframes rf-celebrate-fade-in {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* ── celebration classes ───────────────────────────────────────────────
+   Each class is one-shot: the consumer applies it for the duration of
+   the animation, then removes it (state cleared via setTimeout). The
+   animation-fill-mode default ("none") returns the element to its base
+   styles when the animation ends, so no stuck transforms or colors.   */
+
+/* Routine-done runs the settle (scale) and a soft success "halo" glow
+   via box-shadow in parallel. The glow is additive — it layers an outer
+   success-tinted shadow on top of the card's existing elevation, so the
+   card surface is never replaced or tinted under its content.          */
+.rf-celebrate--routine-done {
+  animation:
+    rf-celebrate-settle var(--d-glide) var(--e-spring),
+    rf-celebrate-routine-glow var(--d-slow) var(--e-soft);
+  position: relative;
+}
+
+@keyframes rf-celebrate-routine-glow {
+  0%, 100% {
+    box-shadow: var(--sh-lg), var(--sh-inner);
+  }
+  50% {
+    box-shadow:
+      var(--sh-lg),
+      var(--sh-inner),
+      0 0 0 6px var(--c-success-subtle);
+  }
+}
+
+/* Habit pop — applied to the StreakBadge outer pill. The inner numeral
+   inflates briefly to draw attention to the new value; the surrounding
+   "day streak" caption stays still so the badge doesn't visually wobble. */
+.rf-celebrate--habit-pop .rf-streak__num {
+  display: inline-block;
+  transform-origin: center;
+  animation: rf-celebrate-pop var(--d-glide) var(--e-spring);
+}
+
+/* Habit row tint pulse — applied to the .rf-checkrow container. */
+.rf-celebrate--habit-tint {
+  animation: rf-celebrate-tint-pulse var(--d-slow) var(--e-soft);
+}
+
+/* Day-clear wash overlay — applied to .rf-wash.
+   Layered via ::after so it stacks on top of the existing ::before
+   noise overlay without disturbing the palette gradients. No z-index
+   set: source order places this above ::before but below `.rf-page`
+   (which sets z-index: 1), so the page content is never occluded.   */
+.rf-wash.rf-celebrate--day-clear::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(70% 55% at 50% 40%, var(--c-brand-primary-subtle) 0%, transparent 70%);
+  animation: rf-celebrate-wash-warm 800ms var(--e-soft);
+}
+
+/* Hero numeral morph — applied to the numeral wrapper when the digit
+   changes. Combined with React key-change unmount/remount so each new
+   digit gets its own animation. */
+.rf-celebrate--num-morph {
+  animation: rf-celebrate-num-morph var(--d-ease) var(--e-decel);
+}
+
+/* Subtitle crossfade — applied to the hero subtitle when the copy
+   changes (e.g. "things left for today" -> "all done. enjoy."). */
+.rf-celebrate--subtitle-morph {
+  animation: rf-celebrate-fade-in var(--d-ease) var(--e-decel);
+}
+
+/* ── 7-9. streak milestone celebrations ────────────────────────────────
+   Fire on the StreakBadge when currentStreak crosses 7 / 30 / 100 as a
+   result of completion. Up-transitions ONLY — per the "no streak
+   punishment" rule in design/README.md, missing a day does not animate.
+   Progressively more visible as the milestone gets rarer: a single
+   hairline ring at 7, a two-layer ring at 30, a three-layer ring plus
+   a brief brand-subtle fill at 100. Calm — no confetti, no particles. */
+
+/* 7-day: hairline ring expands ~6px from the pill outline and fades.
+   `box-shadow` rather than `outline` so it composes with the existing
+   pill border-radius. Duration ~700ms total (var(--d-slow) = 420ms is
+   the visible motion; declarative duration is 700ms to allow the JS
+   timer + CSS animation to align). */
+@keyframes rf-celebrate-milestone-ring-7 {
+  0% {
+    box-shadow: 0 0 0 0 var(--c-brand-primary);
+  }
+  60% {
+    box-shadow: 0 0 0 6px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+/* 30-day: two-stage expansion. Inner ring in brand-primary expands
+   first; the outer brand-primary-subtle ring carries past it as the
+   inner fades. Longer arc — ~1100ms — so the "month is locked in"
+   beat lands. Still no surface tint on the badge. */
+@keyframes rf-celebrate-milestone-ring-30 {
+  0% {
+    box-shadow:
+      0 0 0 0 var(--c-brand-primary),
+      0 0 0 0 var(--c-brand-primary-subtle);
+  }
+  40% {
+    box-shadow:
+      0 0 0 4px transparent,
+      0 0 0 8px var(--c-brand-primary-subtle);
+  }
+  100% {
+    box-shadow:
+      0 0 0 0 transparent,
+      0 0 0 0 transparent;
+  }
+}
+
+/* 100-day: rare moment. Three-layer ring pulse plus a brief warm
+   brand-primary-subtle fill on the badge itself. The fill rests at
+   transparent so the pill returns to its base brand-subtle bg when
+   the animation ends (animation-fill-mode default = none). ~1500ms. */
+@keyframes rf-celebrate-milestone-ring-100 {
+  0% {
+    box-shadow:
+      0 0 0 0 var(--c-brand-primary),
+      0 0 0 0 var(--c-brand-primary-subtle),
+      0 0 0 0 var(--c-brand-primary);
+    background-color: var(--c-brand-primary-subtle);
+  }
+  35% {
+    box-shadow:
+      0 0 0 3px transparent,
+      0 0 0 7px var(--c-brand-primary-subtle),
+      0 0 0 14px transparent;
+    background-color: transparent;
+  }
+  100% {
+    box-shadow:
+      0 0 0 0 transparent,
+      0 0 0 0 transparent,
+      0 0 0 0 transparent;
+    background-color: transparent;
+  }
+}
+
+/* Milestone classes — applied to the StreakBadge outer pill. They
+   compose cleanly with `.rf-celebrate--habit-pop` because that class
+   animates the inner numeral's `transform`, while these animate the
+   pill's `box-shadow` (+ `background-color` for the 100-day variant).
+   Decel ease — matches the "settle out" feel of the existing
+   completion celebrations. */
+.rf-celebrate--milestone-7 {
+  animation: rf-celebrate-milestone-ring-7 var(--d-slow) var(--e-decel) both;
+}
+.rf-celebrate--milestone-30 {
+  animation: rf-celebrate-milestone-ring-30 1100ms var(--e-decel) both;
+}
+.rf-celebrate--milestone-100 {
+  animation: rf-celebrate-milestone-ring-100 1500ms var(--e-decel) both;
+}
+
+/* ── 10. milestone inline message ──────────────────────────────────────
+   A short mono caption that appears next to the StreakBadge for ~5s
+   when a milestone is crossed. Calm and in-place — fades in over
+   280ms, holds, then fades out over 320ms starting at 4500ms. The
+   React side mounts/unmounts this span via state with a coordinating
+   timeout, so the element is also removed from the DOM at ~5s.
+
+   Lowercase reads quieter than uppercase in this register; we keep
+   the eyebrow tracking (--tr-wide) and mono family to match the rest
+   of the today-view eyebrow vocabulary without shouting.              */
+@keyframes rf-celebrate-milestone-msg-in {
+  from { opacity: 0; transform: translateY(2px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes rf-celebrate-milestone-msg-out {
+  to { opacity: 0; transform: translateY(-2px); }
+}
+
+.rf-celebrate--milestone-message {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tr-wide);
+  color: var(--c-brand-primary);
+  opacity: 0;
+  animation:
+    rf-celebrate-milestone-msg-in 280ms var(--e-decel) both,
+    rf-celebrate-milestone-msg-out 320ms var(--e-decel) 4500ms forwards;
+}
+
+/* Defense-in-depth: explicit reduced-motion guard. design/base.css's
+   `animation-duration: 1ms !important` already covers these classes,
+   but we add an explicit `animation: none` here so the day-clear
+   pseudo-element overlay (which would otherwise paint a stuck colored
+   tint for 1ms) skips entirely.
+
+   The milestone-message gets the same `animation: none` AND an
+   `opacity: 1` override so the message text is still visible for its
+   full ~5s lifetime (the JS unmount handles removal); without the
+   opacity override the `opacity: 0` rest state would hide it.        */
+@media (prefers-reduced-motion: reduce) {
+  .rf-celebrate--routine-done,
+  .rf-celebrate--habit-pop .rf-streak__num,
+  .rf-celebrate--habit-tint,
+  .rf-celebrate--num-morph,
+  .rf-celebrate--subtitle-morph,
+  .rf-celebrate--milestone-7,
+  .rf-celebrate--milestone-30,
+  .rf-celebrate--milestone-100,
+  .rf-celebrate--milestone-message,
+  .rf-wash.rf-celebrate--day-clear::after {
+    animation: none !important;
+  }
+  .rf-celebrate--milestone-message {
+    opacity: 1 !important;
+  }
+  .rf-wash.rf-celebrate--day-clear::after {
+    display: none !important;
+  }
+}
