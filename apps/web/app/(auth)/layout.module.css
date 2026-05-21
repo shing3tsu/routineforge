@@ -1,0 +1,96 @@
+/*
+ * Auth route-group layout.
+ *
+ * Mobile (< 900): single column. The brand sits at the top inside the form
+ *                 card; the side panel is hidden.
+ * Desktop (>= 900): split panel — marketing left (wash bg), form right
+ *                   (elevated surface).
+ *
+ * Maps to design/mockups/{signup,login}.html.
+ */
+
+.frame {
+  min-height: 100dvh;
+  background: var(--c-surface-base);
+  color: var(--c-text-primary);
+  display: flex;
+  flex-direction: column;
+}
+
+.formCol {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--s-8) var(--s-5);
+  background: var(--c-surface-elevated);
+}
+
+.card {
+  width: 100%;
+  max-width: 400px;
+}
+
+.brand {
+  margin-bottom: var(--s-8);
+}
+
+.side {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .frame {
+    flex-direction: row;
+  }
+
+  .side {
+    display: flex;
+    flex: 1.1;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: var(--s-12);
+    position: relative;
+  }
+
+  .formCol {
+    flex: 1;
+  }
+
+  /* On desktop the brand sits in the side panel, so suppress the in-form one. */
+  .brand {
+    display: none;
+  }
+}
+
+.sideBody {
+  position: relative;
+  z-index: 1;
+}
+
+.sideBody h2 {
+  font-size: var(--fs-5xl);
+  font-weight: 600;
+  letter-spacing: var(--tr-tight);
+  color: var(--c-text-primary);
+  margin: var(--s-3) 0 var(--s-4);
+  max-width: 24ch;
+  line-height: 1.05;
+}
+
+.sideBody p {
+  font-size: var(--fs-lg);
+  color: var(--c-text-secondary);
+  max-width: 48ch;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.sideFooter {
+  font-size: var(--fs-xs);
+  color: var(--c-text-muted);
+  font-family: var(--font-mono);
+  letter-spacing: var(--tr-wider);
+  position: relative;
+  z-index: 1;
+}

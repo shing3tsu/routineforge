@@ -1,0 +1,128 @@
+/*
+ * Shared styles for the signup and login form bodies.
+ * Composes the new `.rf-*` design tokens — no legacy `--color-*` / `--spacing-*`
+ * references remain.
+ */
+
+.eyebrow {
+  /* layout-only — typography comes from the global .rf-eyebrow class
+     applied alongside this one. */
+  margin-bottom: var(--s-2);
+}
+
+.title {
+  font-size: var(--fs-4xl);
+  font-weight: 600;
+  letter-spacing: var(--tr-tight);
+  line-height: 1.1;
+  margin: var(--s-2) 0 var(--s-2);
+  color: var(--c-text-primary);
+}
+
+@media (min-width: 900px) {
+  .title {
+    font-size: var(--fs-4xl);
+  }
+}
+
+.sub {
+  font-size: var(--fs-base);
+  color: var(--c-text-secondary);
+  margin: 0 0 var(--s-6);
+  line-height: 1.55;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+
+.submit {
+  margin-top: var(--s-2);
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  margin: var(--s-5) 0;
+  color: var(--c-text-muted);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tr-wider);
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--c-border-subtle);
+}
+
+.footer {
+  text-align: center;
+  margin-top: var(--s-8);
+  font-size: var(--fs-sm);
+  color: var(--c-text-secondary);
+}
+
+.footer a {
+  color: var(--c-brand-primary);
+  font-weight: 500;
+}
+
+.legal {
+  text-align: center;
+  margin-top: var(--s-4);
+  font-size: var(--fs-xs);
+  color: var(--c-text-muted);
+  line-height: 1.6;
+}
+
+.legal a {
+  color: var(--c-text-secondary);
+  text-decoration: underline;
+}
+
+.forgot {
+  font-size: var(--fs-xs);
+  color: var(--c-brand-primary);
+  font-weight: 500;
+}
+
+/* ---------- Status banners ---------- */
+/* Composes the .rf-alert family from base.css with our own padding tweak. */
+
+.banner {
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--r-lg);
+  font-size: var(--fs-sm);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-2);
+}
+
+.banner-success {
+  background: var(--c-success-subtle);
+  color: var(--c-success);
+}
+
+.banner-danger {
+  background: var(--c-danger-subtle);
+  color: var(--c-danger);
+}
+
+.banner-info {
+  background: var(--c-info-subtle);
+  color: var(--c-info);
+}
+
+.devHint {
+  font-size: var(--fs-xs);
+  color: var(--c-text-muted);
+  margin-top: var(--s-1);
+  display: block;
+}
