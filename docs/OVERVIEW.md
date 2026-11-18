@@ -39,7 +39,7 @@ Data lives in Postgres via Drizzle ORM. In development, when `DATABASE_URL` is u
 - **App Router pages**: server components by default; interactive parts are explicitly marked `'use client'`. The page-to-file mapping is in the "Surface area map" below.
 - **No CSS framework**: the design system is a CSS-tokens approach in `apps/web/app/globals.css` (re-exporting `design/tokens.css` + `design/base.css` + `design/animations.css`). Components own a sibling `*.module.css` file when they need styles beyond the token utilities.
 - **Theme**: `apps/web/lib/theme/theme.ts` + `apps/web/lib/theme/actions.ts`. Palette is stored on the user (server) and mirrored to a cookie + `<html data-palette>` attribute so first paint is correct. Light/dark mode follows the OS by default, with an explicit override.
-- **PWA**: `apps/web/public/sw.js` (service worker), `apps/web/public/manifest.webmanifest`, and the install prompt logic under `apps/web/components/pwa/`. Offline writes are queued in IndexedDB and replayed on reconnect — see `apps/web/lib/pwa/`.
+- **PWA**: `apps/web/public/sw.js` (service worker), `apps/web/public/manifest.webmanifest`, and the install prompt logic under `apps/web/components/pwa/`. Offline completion toggles are queued in `localStorage` and replayed on reconnect — see `apps/web/lib/pwa/offlineQueue.ts`.
 - **Web Push subscription** UX is wired through `apps/web/components/push/` and the account "Devices" list. The subscription endpoint + keys never leave the server after the initial `POST /api/push/subscriptions`.
 
 ### Data flow at a glance

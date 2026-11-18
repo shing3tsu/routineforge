@@ -329,7 +329,6 @@ These are the things explicitly deferred from MVP:
 - **Rate-limit storage** — current rate-limiter is in-process. Multi-instance Vercel deploys reset per-instance. For real traffic, swap to **Upstash Redis** (Vercel marketplace, 1-click). One file to change: `apps/web/lib/rate-limit.ts`.
 - **Analytics** — Vercel Analytics is free; flip on in dashboard.
 - **Error monitoring** — Sentry or similar.
-- **Custom favicon** — current is the default Next.js one. Replace `apps/web/app/favicon.ico` with a branded mark from the icon system.
 - **Marketing site** — the current `/` for signed-out users is functional but minimal. Could expand into a real landing page if you're acquiring users beyond yourself.
 
 ### Backup + migrate local pglite → production Supabase
