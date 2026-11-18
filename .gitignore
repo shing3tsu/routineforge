@@ -70,3 +70,6 @@ ruvector.db
 
 # Build info
 *.tsbuildinfo
+
+# personal local seed data
+apps/web/scripts/seed-sina.ts
