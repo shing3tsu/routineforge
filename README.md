@@ -76,6 +76,6 @@ No CI badges are shipped yet — run the test commands locally (see [docs/SETUP.
 
 ## License
 
-Private project. No license granted. Contact the author for any use beyond reading the code.
+Released under the MIT License — see [LICENSE](./LICENSE).
 
 Author: Sina Ghaffari (`sinaghaffari1@outlook.com`).
